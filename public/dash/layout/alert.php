@@ -847,7 +847,7 @@
                 <div class="container">
                  
 
-                    <p id="alert_body" style="text-align: center;">No Invoice Select and Enter Any Remarks value  </p>
+                    <p id="alert_body" style="text-align: center;">Enter Any Remarks value  </p>
                     <div class="mb-3"></div>
                 </div>
                 <div class="modal-footer">

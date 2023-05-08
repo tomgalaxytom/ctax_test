@@ -1833,63 +1833,42 @@ $role_type_id, $dc_name,$remarks){
         "remarks" =>$remarks
     );
 
- 
-
-     
+    // echo '<pre>';
+    // print_r( $loginCredential);
+    // exit;
         if($dc_name != ""){
             $dc_userid  = $dc_name;
         }
         else{
             $dc_userid  = "";
         }
-
-    if($role_type_id == '02'){ // ADC
-
-        $query = "select mdu.userid ,mdu.email, mdu.roletypecode,mdu.distcode,md.distename from mybillmyright.mst_dept_user  mdu
-inner join mybillmyright.mst_district md on  mdu.distcode = md.distcode 
-where  mdu.distcode in(select  distinct distcode from mybillmyright.bill_selection_details) and 
-mdu.roletypecode = '03'";
-
-//  echo $query;
-// exit;
-
-        $this->db->query($query);
-        $fetchForwarduserid = $this->db->resultSet1();
-
-        // echo '<pre>';
-        // print_r($fetchForwarduserid);
-        // exit;
-
-                foreach ($fetchForwarduserid as $value) { // Fetch Forward User id Foreach start
-                     $userid = $value['userid'] ;
-
-                    $query = "select  distinct bs.bill_selection_id
-                        from mybillmyright.bill_selection_details bs 
-                        inner join mybillmyright.mst_dept_user md on  bs.distcode = md.distcode where  bs.bill_selection_id in($bill_selection_id)";
-
-                         $this->db->query($query);
-                         $fetchRecords = $this->db->resultSet1();
-                             foreach ($fetchRecords as $value2) {  // Fetch Records Based Bill Selectionid  Foreach start
-                                $bill_selection_id = $value2['bill_selection_id'] ;
-                                $sqlQuery = "select mybillmyright.forwardBillSelection1($bill_selection_id,'F',$userid,$logged_in_userid,'$remarks')";
+        if($role_type_id == '02'){ // ADC
+            $query = "select bsd.distcode,bsd.bill_selection_id,
+            (select distename from mybillmyright.mst_district where distcode = bsd.distcode),
+            (select userid from mybillmyright.mst_dept_user where 
+             distcode = bsd.distcode and roletypecode = '03')
+            from mybillmyright.bill_selection_details bsd WHERE bsd.bill_selection_id in(  $bill_selection_id)";
+            $this->db->query($query);
+            $fetchRecords = $this->db->resultSet1();
+            foreach ($fetchRecords as $value2) {  // Fetch Records Based Bill Selectionid  Foreach start
+                $bill_selection_id = $value2['bill_selection_id'] ;
+                $userid   = $value2['userid'] ;
+                $sqlQuery = "select mybillmyright.forwardBillSelection1($bill_selection_id,'F',$userid,$logged_in_userid,'$remarks')";
 
 
-                                //echo $sqlQuery;
-                               
-                                $this->db->query($sqlQuery) ;
-                               $this->db->execute();
-                               $updatequery               =    "UPDATE mybillmyright.bill_selection_details
-                               SET p_status = '1' where bill_selection_id in($bill_selection_id)";
-                                        $this->db->query($updatequery);
-                                        $row = $this->db->execute() ;
-                            } // Fetch Records Based Bill Selectionid  Foreach start
+                //echo $sqlQuery;
+               
+                $this->db->query($sqlQuery) ;
+               $this->db->execute();
+               $updatequery               =    "UPDATE mybillmyright.bill_selection_details
+               SET p_status = '1' where bill_selection_id in($bill_selection_id)";
+                        $this->db->query($updatequery);
+                        $row = $this->db->execute() ;
+            } // Fetch Records Based Bill Selectionid  Foreach start
+            return $row;
+        }//ADC
 
-
-
-                } // Fetch Forward User id Foreach End
-
-                return $row;
-    } // ADC End
+    
 
 }
 

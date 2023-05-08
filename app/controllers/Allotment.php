@@ -404,14 +404,14 @@ $verifyfilePathLength = $value['filepath'];
 
 
                                 $message = "true";
-                                $remarks = $_POST['r1_remarks'];
+                                //$remarks = $_POST['r1_remarks'];
                             }
                              else{
                                 $message = "false";
-                                $remarks =$_POST['r1_remarks'];
+                               // $remarks =$_POST['r1_remarks'];
                             }
 
-                           $response = array("message" =>  $message,"remarks" =>$remarks);
+                           $response = array("message" =>  $message);
                             echo json_encode($response);
                             exit;
                 }
@@ -877,6 +877,11 @@ $verifyfilePathLength = $value['filepath'];
                     $dc_name            = $_POST['dc_name'];
                     $remarks            = $_POST['remarks'];
                     $logged_in_userid   = $_SESSION['user']->userid;
+
+
+
+
+
 
                     $session_details    =   $this->Mybill->session_details();
                     $session_roleid     =   $session_details[0]->roletypecode;
