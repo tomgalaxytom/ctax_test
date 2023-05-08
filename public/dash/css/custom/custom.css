@@ -1,0 +1,161 @@
+.disable_this
+{
+  display:none;
+}
+
+.dash{
+    border-radius: 25px;
+    background-color:rgb(119, 196, 188);
+}
+
+.required:after {
+    content:" *";
+    color: red;
+  }
+
+  .clr{
+    color:black;
+  }
+
+   ::placeholder{
+      color: #949494 !important;
+  }
+
+  .lable_size{
+    font-size: 15px;
+  }
+
+  #datatables-basic td {
+    color:black;
+  }
+  
+  .govt_head .g_row1{
+    align-items: center;
+}
+section.govt_head img {
+width: 70%;
+} 
+
+@media(max-width:600px){
+  .govt_head .g_row1 {
+  padding: 2%;
+}
+  .g_row1 [class*="col"]:nth-child(odd) {
+  width: 28%;
+}
+  .g_row1 [class*="col"]:nth-child(even) {
+  width: 70%;
+}
+.g_row1 h4, .g_row1 h5, .g_row1 h6 {
+  font-size: 11px;
+}
+
+.g_row2{
+  justify-content: center;
+}
+.dropdown{
+  margin-left: -13px ! important;
+}
+}
+
+
+@media(max-width:600px){
+  .mbl_view{
+    margin-top: 10%;
+  }
+  #sidebar-menu {
+    padding: 170px 0 30px 0 !important;
+  }
+}
+
+
+.card_header_color
+  {
+    background:#1E3D5D;
+    font-size: 15px;
+    color:white;
+    text-align:center;
+    font-weight: bold;
+    font-family: arial,sans-serif,verdana;
+  }
+
+  
+  .disable_this
+  {
+    display:none;
+  }
+
+  .text_redcolour
+ {
+  color:#ff0000; font-size:80%!important;
+ }
+
+ .datatables-basic td, .datatables-basic th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .datatables-basic tr:nth-child(odd){background-color: #f2f2f2;}
+  
+  .datatables-basic tr:hover {background-color: #ddd;}
+  
+  .datatables-basic th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #6b6b6c;
+    color: white;
+  }
+
+  .button_save
+  {
+    background-color:#56a1e3;
+	color:white
+  }
+ 
+  .page_content_up
+  {
+    position: relative;
+   // top: -40px;
+  }
+
+	/* .editicon
+	{
+		color: #1e3d5d;
+		cursor:pointer
+      padding: 6px;
+      color: white;
+      cursor:pointer;
+      background: #1e3d5d;
+      border-radius: 10%; 
+
+
+
+      background-color : #1e3d5d;
+      border: 5px solid #1e3d5d;
+       opacity: 0.9;
+      color:#0262af;
+      cursor:pointer
+    } */
+
+	.forward_icon {
+		padding: 6px;
+		color: white;
+		cursor:pointer;
+		background: #1e3d5d;
+		border-radius: 10%;
+	}
+
+  .editicon {
+		padding: 6px;
+		color: white;
+		cursor:pointer;
+		background: #1e3d5d;
+		border-radius: 10%;
+	}
+
+  .updatebutton
+  {
+    background : #0262af;
+    color: white;
+  }
