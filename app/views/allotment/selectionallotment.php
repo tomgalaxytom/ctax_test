@@ -118,7 +118,7 @@ include('./././public/dash/layout/sidebar.php');
 
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                        <label class=" col-form-label required">Select Districts</label>
+                                                        <label class=" col-form-label required">Select Districts By stalin</label>
                                                         <div class="form-group row">
                                                             <div class="col-sm-4">
                                                             <select class="form-select " name="distid"  <?php echo $m;?> id="distid" >
