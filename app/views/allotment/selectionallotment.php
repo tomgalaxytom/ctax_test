@@ -197,7 +197,7 @@ include('./././public/dash/layout/sidebar.php');
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" value="" name="flexCheckChecked"  required style="font-size:21px" id="flexCheckChecked" >
                                                         <label class="form-check-label" style ="margin-top:5px" for="flexCheckChecked">
-                                                            Agreed,the terms and condition for Allotment Process
+                                                            I agree,the terms and condition for Allotment Process
                                                         </label>
                                                     </div>
                                                 </div>
