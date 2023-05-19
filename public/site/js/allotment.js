@@ -5,6 +5,8 @@ var siteurl = "http://localhost/projects/ctax_test/";
 
 
 window.onload = function () {
+
+   
     //
     fetch_data_auto_load("", "", "", "all", "auto", "all");
     //Column Hide /Show
@@ -272,7 +274,7 @@ function fetch_data(selectCountValue, yearmonth, seedValue, district) {
     fetch_data_auto_load(selectCountValue, yearmonth, seedValue, district, actionfunc = 'form-submit', 'all');
     if (session_roleid == '02') {
         var dt = $('#billSelectionTable').DataTable();
-        dt.columns([4, 5, 6]).visible(false);
+        dt.columns([0,4, 5, 6]).visible(false);
         // location.reload();
     }
     else {
@@ -311,7 +313,7 @@ $('#bill_status').on('change', function (e) {
 
 
 function fetch_data_auto_load(selectCountValue, yearmonth, seedValue, district, actionfunc, bill_status) {
-    debugger;
+    
     var formData = {
         select_count_value: selectCountValue,
         yearmonth: yearmonth,
@@ -343,7 +345,7 @@ function emptyTableChecking(formData, district) {
         },
         success: function (data, textStatus, jqXHR) {
             if (jqXHR.status == '200') {
-                debugger;
+                
                 if (data.message == 'true' && data.count > 0) {
 
 
@@ -450,9 +452,9 @@ function displayDatatable(formData) {  //DisplayDatatable if start
 
                 // className: 'dtr-control',
                 orderable: false,
-                'checkboxes': {
-                    'selectRow': true
-                }
+                // 'checkboxes': {
+                //     'selectRow': true
+                // }
             },
 
             {
@@ -491,7 +493,7 @@ function displayDatatable(formData) {  //DisplayDatatable if start
 
         var dt = $('#billSelectionTable').DataTable();
         //hide the first column
-        dt.columns([2, 4, 5]).visible(false);
+        dt.columns([0,2, 4, 5]).visible(false);
 
         // location.reload();
 
@@ -499,6 +501,8 @@ function displayDatatable(formData) {  //DisplayDatatable if start
 
     }
     else {
+
+        jQuery('.dt-checkboxes-select-all').closest('tr').find('[type=checkbox]').hide();
 
 
         var dt = $('#billSelectionTable').DataTable();
@@ -526,38 +530,18 @@ function displayDatatable(formData) {  //DisplayDatatable if start
         e.preventDefault();
         if (session_roleid == '02') { //ADC
 
-            var form = this;
-            var rows_selected = userDataTable.column(0).checkboxes.selected();
-            if (rows_selected.length > 0) {
-                $('#select_any_checkbox').modal('hide');
-                forward_to_jc_one();
-            }
-            else {
-                $('#select_any_checkbox').modal('show');
-            }
+            forward_to_jc_one();
         } //ADC END
         else { // Not ADC
 
-            var rows_selected = userDataTable.column(0).checkboxes.selected();
-            if (rows_selected.length == 0) {
-                $('#select_any_checkbox').modal('show');
+          
+       
 
-            }
-            else {
-                userDataTable.$('input[type="checkbox"]:checked').each(function () {
-                    debugger;
-                    var tsd = $(this).closest("tr").find(".textAreaclass").val();
-                    if (tsd == "") {
-                        $('#no_records').modal('show');
-                        return false;
-                    }
-                });
-            }
-
+           
 
             // $('#dc_confirmation_alert').modal('show');
             // Serialize form data
-            var data = userDataTable.$('input,select,textarea,checkbox').serializeArray();
+            var data = userDataTable.$('input,select,textarea').serializeArray();
 
 
             // Submit form data via Ajax
@@ -568,7 +552,13 @@ function displayDatatable(formData) {  //DisplayDatatable if start
                 data: data,
                 success: function (data) {
 
+                   
+
+                  
+
                     if (data.message == "true") {
+
+                       
                         //  if(data.process_code == 'F'){
 
 
@@ -589,7 +579,7 @@ function displayDatatable(formData) {  //DisplayDatatable if start
 
                     }
                     else {
-
+                        $('#select_any_checkbox').modal('show');
 
                     }
 
@@ -862,8 +852,8 @@ function role_forward(dc_value, remarks, id) {
 $(".action-btn").on('click', function (e) {
     e.preventDefault;
 
-    debugger;
-
+    
+debugger;
     $("#action").val($(this).data('action'));
 
     let action_value = $("#action").val();
@@ -872,6 +862,44 @@ $(".action-btn").on('click', function (e) {
     if (session_roleid == "02") {
 
         var dc_value = "";
+
+        var oTable = $('#billSelectionTable').DataTable();
+
+            
+           
+
+            $.ajax({
+                type: "POST",
+                url: siteurl + '/Allotment/getAdcResultsEachRows',       
+                data: oTable.$('input').serialize(),
+                dataType: "json",
+                success: function(response){
+                    let rowIds = "";
+                    $.each(response.message.bsid, function (index, rowId) {
+
+                        // Create a hidden element
+                        rowIds += `${rowId},`;
+            
+                    });
+                    rowIds = rowIds.substring(0, rowIds.length - 1);
+            
+                    $("#ids").val(rowIds);
+
+                    if (action_value == 'role_forward') {
+                        role_forward(dc_value, "", "");
+                    }
+                    else if (action_value == 'role_revertback') {
+                        role_revert_back(dc_value);
+                    }
+                   
+                   //alert(response);
+                }
+            });
+
+
+
+
+
 
     }
     else if (session_roleid == "03") {
@@ -892,38 +920,38 @@ $(".action-btn").on('click', function (e) {
 
 
     //let form = "#frm-example";
-    let rowIds = "";
+    // let rowIds = "";
 
 
 
-    if (rows_selected.length == 0) {
+    // if (rows_selected.length == 0) {
 
-        swal("Please select atleast one checkbox");
-        return false;
+    //     swal("Please select atleast one checkbox");
+    //     return false;
 
-    } else {
+    // } else {
 
-        let title = action_value[0].toUpperCase() + action_value.slice(1);
-        $.each(rows_selected, function (index, rowId) {
-            // Create a hidden element
-            rowIds += `${rowId},`;
+    //     let title = action_value[0].toUpperCase() + action_value.slice(1);
+    //     $.each(rows_selected, function (index, rowId) {
+    //         // Create a hidden element
+    //         rowIds += `${rowId},`;
 
-        });
-        rowIds = rowIds.substring(0, rowIds.length - 1);
+    //     });
+    //     rowIds = rowIds.substring(0, rowIds.length - 1);
 
-        $("#ids").val(rowIds);
+    //     $("#ids").val(rowIds);
 
-        if (action_value == 'role_forward') {
-            role_forward(dc_value, "", "");
-        }
-        else if (action_value == 'role_revertback') {
-            role_revert_back(dc_value);
-        }
-
-
+    //     if (action_value == 'role_forward') {
+    //         role_forward(dc_value, "", "");
+    //     }
+    //     else if (action_value == 'role_revertback') {
+    //         role_revert_back(dc_value);
+    //     }
 
 
-    }
+
+
+    // }
 
 });
 $(function () {

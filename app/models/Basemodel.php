@@ -1881,16 +1881,13 @@ public function forwardToBillSelection($data,$role_type_id,$logged_in_userid ){ 
     else if($role_type_id == '03'){ //JC
         for($i = 1;$i<=$cnt ;$i++){ //forloop start
 
-            if(isset($data['r'.$i."_processcode"]) && $data['r'.$i."_processcode"] !=""  && 
-               isset($data['r'.$i."_roleuserid"]) && $data['r'.$i."_roleuserid"] !="" && 
-               isset($data['r'.$i."_remarks"]) && $data['r'.$i."_remarks"] !=""&& 
-               isset($data['r'.$i."_bsid"]) && $data['r'.$i."_bsid"] !="")
+            if(isset($data['r'.$i."_checkbox"]) && $data['r'.$i."_checkbox"] !="")
             {  
 
                 $bill_selection_id = $data['r'.$i."_bsid"];
                 $process_code      = $data['r'.$i."_processcode"];
                 $userid            = $data['r'.$i."_roleuserid"];
-                $remarks           = $data['r'.$i."_remarks"];
+                $remarks           = ($data['r'.$i."_remarks"] !=""?$data['r'.$i."_remarks"] :"");
                 $sqlQuery = "select mybillmyright.forwardBillSelection1($bill_selection_id,'$process_code',$userid,$logged_in_userid,'$remarks')";
                 $this->db->query($sqlQuery) ;
                 $this->db->execute();
@@ -1913,11 +1910,7 @@ public function forwardToBillSelection($data,$role_type_id,$logged_in_userid ){ 
 
         for($i = 1;$i<=$cnt ;$i++){ //forloop start
 
-            if(isset($data['r'.$i."_processcode"]) && $data['r'.$i."_processcode"] !=""  && 
-               isset($data['r'.$i."_roleuserid"]) && $data['r'.$i."_roleuserid"] !="" && 
-               isset($data['r'.$i."_remarks"]) && $data['r'.$i."_remarks"] !="" && 
-                isset($data['r'.$i."_bsid"]) && $data['r'.$i."_bsid"] !="" &&
-                 isset($data['r'.$i."_jcs"]) && $data['r'.$i."_jcs"] !="")
+            if(isset($data['r'.$i."_checkbox"]) && $data['r'.$i."_checkbox"] !="")
             {  //if condition with Forloop
                 // Forward
 
@@ -1926,7 +1919,7 @@ public function forwardToBillSelection($data,$role_type_id,$logged_in_userid ){ 
                 $bill_selection_id = $data['r'.$i."_bsid"];
                 $process_code      = $data['r'.$i."_processcode"];
                 $userid            = $data['r'.$i."_roleuserid"];
-                $remarks           = $data['r'.$i."_remarks"];
+                $remarks           = ($data['r'.$i."_remarks"] !=""?$data['r'.$i."_remarks"] :"");
                 $sqlQuery = "select mybillmyright.forwardBillSelection1($bill_selection_id,'$process_code',$userid,$logged_in_userid,'$remarks')";
                
                 $this->db->query($sqlQuery) ;
@@ -1951,62 +1944,46 @@ public function forwardToBillSelection($data,$role_type_id,$logged_in_userid ){ 
      else if($role_type_id == '05'){ //AC
      
         for($i = 1;$i<=$cnt ;$i++){ //forloop start
-            if(isset($data['r'.$i."_processcode"]) && $data['r'.$i."_processcode"] =="V" ){//verified start
+           
 
-                if(isset($data['r'.$i."_processcode"]) && $data['r'.$i."_processcode"] !=""  && 
-               isset($data['r'.$i."_remarks"]) && $data['r'.$i."_remarks"] !="" && 
-                isset($data['r'.$i."_bsid"]) && $data['r'.$i."_bsid"] !="")
+                if(isset($data['r'.$i."_checkbox"]) && $data['r'.$i."_checkbox"] !="" )
                  {  //if condition with Forloop
 
+                    if(isset($data['r'.$i."_processcode"]) && $data['r'.$i."_processcode"] =="V" ){//verified start
+                        $bill_selection_id = $data['r'.$i."_bsid"];
+                        $process_code      = $data['r'.$i."_processcode"];
+                        $remarks           = ($data['r'.$i."_remarks"] !=""?$data['r'.$i."_remarks"] :"");
+                        $sqlQuery = "select mybillmyright.verifybillselection($bill_selection_id,'$process_code',3,$logged_in_userid,'$remarks')";
+                        $this->db->query($sqlQuery) ;
+                        $this->db->execute();
+                        $updatequery =    "UPDATE mybillmyright.bill_selection_details SET p_status = '5' where bill_selection_id in($bill_selection_id)";
+                        $this->db->query($updatequery);
+                        $row = $this->db->execute() ;
+                    }//verified End
+                    else{
 
-                    $bill_selection_id = $data['r'.$i."_bsid"];
-                    $process_code      = $data['r'.$i."_processcode"];
-                    $remarks           = $data['r'.$i."_remarks"];
-                    $sqlQuery = "select mybillmyright.verifybillselection($bill_selection_id,'$process_code',3,$logged_in_userid,'$remarks')";
-                    $this->db->query($sqlQuery) ;
-                    $this->db->execute();
-                    $updatequery =    "UPDATE mybillmyright.bill_selection_details SET p_status = '5' where bill_selection_id in($bill_selection_id)";
-                    $this->db->query($updatequery);
-                    $row = $this->db->execute() ;
+                        if(isset($data['r'.$i."_processcode"]) && $data['r'.$i."_processcode"] =="R" ){//Revert start
+                            $bill_selection_id = $data['r'.$i."_bsid"];
+                            $process_code      = $data['r'.$i."_processcode"];
+                            $userid            = $data['r'.$i."_roleuserid"];
+                            $remarks           = ($data['r'.$i."_remarks"] !=""?$data['r'.$i."_remarks"] :"");
+                            $sqlQuery = "select mybillmyright.forwardBillSelection1($bill_selection_id,'$process_code',$userid,$logged_in_userid,'$remarks')";
+                           
+                            $this->db->query($sqlQuery) ;
+                            $this->db->execute();
+                            $updatequery =    "UPDATE mybillmyright.bill_selection_details SET p_status = '2' where bill_selection_id in($bill_selection_id)";
+                            $this->db->query($updatequery);
+                            $row = $this->db->execute() ;
+                        }//Revert End
+
+                    }
 
                  } //if condition with Forloop
 
-            }// verified end
-            else{//Revert Back start
-
-                if(isset($data['r'.$i."_processcode"]) && $data['r'.$i."_processcode"] !=""  && 
-            isset($data['r'.$i."_roleuserid"]) && $data['r'.$i."_roleuserid"] !="" && 
-               isset($data['r'.$i."_remarks"]) && $data['r'.$i."_remarks"] !="" && 
-                isset($data['r'.$i."_bsid"]) && $data['r'.$i."_bsid"] !="")
-                 {  //if condition with Forloop
-
-
-                $bill_selection_id = $data['r'.$i."_bsid"];
-                $process_code      = $data['r'.$i."_processcode"];
-                $userid            = $data['r'.$i."_roleuserid"];
-                $remarks           = $data['r'.$i."_remarks"];
-                $sqlQuery = "select mybillmyright.forwardBillSelection1($bill_selection_id,'$process_code',$userid,$logged_in_userid,'$remarks')";
-               
-                $this->db->query($sqlQuery) ;
-                $this->db->execute();
-                $updatequery =    "UPDATE mybillmyright.bill_selection_details SET p_status = '2' where bill_selection_id in($bill_selection_id)";
-                $this->db->query($updatequery);
-                $row = $this->db->execute() ;
-
-                 }
-
-            }//Revert Back start
+           
+            
         } // foreach End
 
-
-        
-      
-    
-
-  
-
-    
-       
             return @$row;
 
     }//AC

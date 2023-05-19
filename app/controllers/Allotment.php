@@ -111,6 +111,7 @@ class Allotment extends Controller
                     $fianl_roles = $fetch_roles;
             }
             else if( $roletypecode == '03'){//JC
+                
                 $status = array('roletypecode' => '04','distcode' =>$distcode);
                  $kj = $j+1;
                  $fetchRecords12 = ($Basemodel->getMultipleData($status, $id));
@@ -200,8 +201,10 @@ TEXT;
 
                 $process_code = <<<TEXT
                 <select name="r{$kj}_processcode" id='processcode' class='form-select processcode' >
-                <option value='V'>Verifed</option>
-                <option value='R'>Return</option></select>
+                <option value='V'>Verifed-Eligible</option>
+                <option value='VIE'>Verifed-InEligible</option>
+                <option value='R'>Sent Back</option>
+                <option value='RO'>Rejected Options</select>
 TEXT;
                 $fianl_roles = $process_code."<br>".$fetch_roles;
 
@@ -277,17 +280,47 @@ $verifyfilePathLength = $value['filepath'];
                    $access_code =  $remark['process_code'];
                    if( $access_code=="F"){
                        $access_code_msg = "Forwarded To  ";
-                       $r = "<ul style='list-style:none;padding-left:4px'>
+
+                       if($rm_message == ""){
+
+                        $r = "";
+
+                       }
+                       else{
+
+                        $r = "<ul style='list-style:none;padding-left:4px'>
                    
                        <li><i class='far fa-comment-dots' style='color:green;font-size:15px'></i> " .  $rm_message . "</li>
                     </ul>";
+
+                       }
+
+
+                       
                    }
                    else{
                         $access_code_msg = "Revert Back  ";
-                        $r = "<ul style='list-style:none;padding-left:4px'>
+
+                        if($rm_message == ""){
+
+                            $r = "";
+
+                        }
+                        else{
+
+                            $r = "<ul style='list-style:none;padding-left:4px'>
                    
                         <li><i class='far fa-comment-dots' style='color:red;font-size:15px'></i> " .  $rm_message . "</li>
                      </ul>";
+
+                        }
+
+
+
+
+
+
+                        
                    }
                    $final_remarks = "<b>".$forwarded_by_name." </b>".$access_code_msg.  "<b>".$forwarded_to_name." </b> on " .$new_date;
 
@@ -302,8 +335,18 @@ $verifyfilePathLength = $value['filepath'];
                     </li>";
                  }
                  $status_message .="</ul>";
+                 $mobilenumber = '';
+                 $mobilenumber .= $value['mobilenumber']."<input type ='hiddenq' name='bsid[]' value= " . $value['bill_selection_id'] . ">";
+
+                 $kj = $j+1;
+
+                 $bill_selection_id = '';
+                 $bill_selection_id .= "<input type ='checkbox' name='r{$kj}_checkbox' value= " . $value['bill_selection_id'] . ">";
 
 
+                
+
+                 
 
 
 
@@ -315,34 +358,15 @@ $verifyfilePathLength = $value['filepath'];
                 // $value['billnumber']."<br>"."/".$value['shopname']."/".$bill_purchase_date;
                  //@stalin
                 $data[] = array(
-                    "bill_selection_id" => $value['bill_selection_id'],
-                   
+                    "bill_selection_id" => $bill_selection_id,
                     "billnumber"        => $invoiceDetails,
-                   
-                   
-                     "action"           => $fianl_roles,
-                     "order_by_column"   => $order_id,
-                     "remarks"            => $remarks_button,
-                    // "status"           => $value['remarks'],
-                     "status"           => $status_message,
-                     "username"              => $value['name'],
-                     "mobilenumber"      => $value['mobilenumber'],
-                     "invoicecopy"          =>  $file,
-
-                    // // "roles"             => $fianl_roles,
-                   
-                    
-                    // "action"            => $remarks_button,
-                    // "order_by_column"   => $value['order_by_column'],
-                    //  "status"           => $value['remarks'],
-                    // "name"              => $value['name'],
-                    // "mobilenumber"      => $value['mobilenumber'],
-                    //  "filepath"          =>  $file,
-                    
-                   
-
-
-                   
+                    "action"           => $fianl_roles,
+                    "order_by_column"   => $order_id,
+                    "remarks"            => $remarks_button,
+                    "status"           => $status_message,
+                    "username"              => $value['name'],
+                    "mobilenumber"      => $mobilenumber,
+                    "invoicecopy"          =>  $file,
                 );
                 $j++;
 
@@ -389,6 +413,11 @@ $verifyfilePathLength = $value['filepath'];
 
 
 
+
+
+                  
+
+
                     $forward_to_bill_selection = $model->forwardToBillSelection($_POST,$role_type_id,$logged_in_userid );
 
                        
@@ -414,6 +443,42 @@ $verifyfilePathLength = $value['filepath'];
                            $response = array("message" =>  $message);
                             echo json_encode($response);
                             exit;
+                }
+            
+            }
+            catch (Exception $e) 
+            {
+                header('HTTP/1.1 '.$e->getCode().' Internal Server Booboo');
+                header('Content-Type: application/json');
+                echo json_encode(array('message' => $e->getMessage(), 'code' => $e->getCode()));
+            }
+         }
+
+
+         
+         public function getAdcResultsEachRows(){
+            try 
+            {
+                if(!(($_SERVER['REQUEST_METHOD']== 'POST') || ($_SERVER['REQUEST_METHOD'] == 'post')))
+                    throw new Exception('Forbidden','403');
+    
+                else
+                {
+                        $_POST  = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
+                         
+
+                    $logged_in_userid   = $_SESSION['user']->userid;
+                    $session_details    =   $this->Mybill->session_details();
+                    $session_roleid     =   $session_details[0]->roletypecode;
+                    $role_type_id       = $session_roleid;
+                    $model = new Basemodel;
+                   
+                    $response = array("message" =>  $_POST);
+                    echo json_encode($response);
+                    exit;
+
+
+                    
                 }
             
             }

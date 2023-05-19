@@ -463,7 +463,7 @@ ORDER BY userid ASC ");
                                         <thead>
                                             <tr>
                                                 
-                                                <th><input name="select_all" value="1" type="checkbox" id="multipleCheckbox"></th>
+                                                <th></th>
                                                 <!-- <th>District Name</th> -->
                                                 <th style="text-align: center;">Invoice Details</th>
                                                 <!-- <th style="text-align: center;">Invoice Amount( <i class="fa fa-inr" aria-hidden="true"></i>)</th> -->
@@ -729,6 +729,9 @@ Licensed under MIT
   border-top: 0;
   border-bottom: 1px solid #eee;
   padding-bottom: 15px;
+}
+.table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before, table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before{
+    left: 40% !important;
 }
 /* Tab Navigation */
 
