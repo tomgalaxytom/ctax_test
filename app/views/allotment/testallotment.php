@@ -129,7 +129,7 @@ include('./././public/dash/layout/sidebar.php');
                                                                     {
                                                                         $disabledStr = in_array($value['distcode'], $alreadyBillSelectedDistricts) ? "disabled" : "";
                                                                         ?>
-                                                                            <option  <?php echo $disabledStr;?>  value="<?= htmlspecialchars($value['distcode']); ?>" ><?= htmlspecialchars($value['distename']); ?></option>   
+                                                                            <option   value="<?= htmlspecialchars($value['distcode']); ?>" ><?= htmlspecialchars($value['distename']); ?></option>   
                                                                     
                                                                         
                                                                     <?php }
@@ -283,250 +283,46 @@ include('./././public/dash/layout/sidebar.php');
                                 
                                 <div class="card">
                                     <div class="card-header card_header_color"> Selection Details </div>
-                                    <div class="card-body" id="dataTableBody">
+                                    <div class="card-body" id="testdataTableBody">
 
                                      <form id="frm-example" name ="frm-example" onsubmit="return false;"> 
                                         <!-- @table-->
                                         
-                                    <table id="billSelectionTable" class="table table-bordered display responsive nowrap "  style= "width: 100%;display:none">
+                                    <table id="testSelectionTable" class="table table-bordered display responsive nowrap "  style= "width: 100%;display:none">
                                     <div id="datatables">
-
-                                    <?php if($roletypecode == '02'){ //ADC Role
-                                        ?>
-
-
-
-                    
-
-                                    <!-- <div class="row"> 
-                            <div class="col-md-2" style="display:none">
-                            <label class=""></label>
-                                <div class="form-group row">
-                                    <div class="col-sm-12">
-                                    <button class="btn btn-danger"><i class="fa fa-thumbs-down" aria-hidden="true"></i> Revert Back</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-9">
-                            
-                            </div>
-                           
-                            <div class="col-md-1">
-                                <label class=""></label>
-                                    <div class="form-group row">
-                                        <div class="col-sm-12">
-                                        <button class="btn btn-success forward-btn" data-action="forward" onclick="forward_to_jc_one()"><i class="fa fa-thumbs-up" aria-hidden="true" ></i> Forward </button> 
-                                        <input type="hidden" name="action" id="action" />
-                                        <input type="hidden" name="ids" id="ids" />
-                                        </div>
-                                    </div>
-                            </div>
-                            
-                        </div> --><!-- DIv Start --->
-                        <?php }
-                        else if($roletypecode == '03'){ //JC Role
-
-
-                                            /*** List of Dcs
-                                             * 
-                                             * /
-                                             */
-                                            $distcode = $_SESSION['user']->distcode;
-
-                                            $dbModel = new database;
-                                        $dbModel->query("SELECT * FROM mybillmyright.mst_dept_user where distcode ='$distcode' and roletypecode = '04'
-ORDER BY userid ASC ");
-                                            $listjcs = $dbModel->resultSet1();
-//echo '<pre>';
-                                            //print_r($listjcs);
-
-                                           
-
-                                             /*** List of Dcs
-                                              * 
-                                              */
-
-                                             ?>
-
-
-                           
-                            <div class="row" >  <!-- DIv Start --->
-                            <!-- <div class="col-md-2" style="display:none">
-                            <label class=""></label>
-                                <div class="form-group row">
-                                    <div class="col-sm-12">
-                                    <button class="btn btn-danger revert_back_btn" onclick="revert_back_to_adc_one()" ><i class="fa fa-thumbs-down" aria-hidden="true"></i> Revert Back</button>
-                                    </div>
-                                </div>
-                            </div> -->
-                            <div class="col-md-8">
-                            
-                            </div>
-                             <div class="col-md-2">
-                                <label class=""></label>
-                                    <div class="form-group row">
-                                        
-                                    </div>
-                            </div>
-
-                            <input type="hidden" name="ids" id="ids" />
-                            <!-- <div class="col-md-2">
-                                <label class=""></label>
-                                    <div class="form-group row">
-                                        <div class="col-sm-12">
-                                        <button class="btn btn-success forward-btn" data-action="forward" onclick="forward_to_dc_one()"><i class="fa fa-thumbs-up" aria-hidden="true" ></i> Forward </button> 
-                                        <input type="hidden" name="action" id="action" />
-                                        <input type="hidden" name="ids" id="ids" />
-                                        </div>
-                                    </div>
-                            </div> -->
-                            
-                        </div>
-                        <br>
-                        <?php 
-
-
-
-
-                        }
-                        else if($roletypecode == '04'){ //DC Role
-
-
-
- 
-                                            $distcode = $_SESSION['user']->distcode;
-
-                                            $dbModel = new database;
-                                        $dbModel->query("SELECT * FROM mybillmyright.mst_dept_user where distcode ='$distcode' and roletypecode = '05'
-ORDER BY userid ASC ");
-                                            $listacs = $dbModel->resultSet1();?>
-
-                                            
-
-
-
-
-
-
-
-
-
-
-                            
-                            <div class="row">  <!-- DIv Start --->
-                           <!--  <div class="col-md-2" >
-                            <label class=""></label>
-                                <div class="form-group row">
-                                    <div class="col-sm-12">
-                                    <button class="btn btn-danger revert_back_btn" onclick="revert_back_to_jc_one()" ><i class="fa fa-thumbs-down" aria-hidden="true"></i> Revert Back</button>
-                                    </div>
-                                </div>
-                            </div> -->
-                            <div class="col-md-6">
-                            
-                            </div>
-                             <div class="col-md-2">
-                                <label class=""></label>
-                                    <div class="form-group row">
-                                        <div class="col-sm-12">
-
-                         
-                                      
-
-
-
-                                        </div>
-                                    </div>
-                            </div>
-                           
-                           <!--  <div class="col-md-2">
-                                <label class=""></label>
-                                    <div class="form-group row">
-                                        <div class="col-sm-12">
-                                        <button class="btn btn-success forward-btn" data-action="forward" onclick="forward_to_ac_one()"><i class="fa fa-thumbs-up" aria-hidden="true" ></i> Forward </button> 
-                                        <input type="hidden" name="action" id="action" />
-                                        <input type="hidden" name="ids" id="ids" />
-                                        </div>
-                                    </div>
-                            </div> -->
-                            
-                        </div>
-                        <br>
-
-
-
-
-                     <?php    }
-                         else if($roletypecode == '05'){ //AC Role
-                            $distcode = $_SESSION['user']->distcode;
-
-                                            $dbModel = new database;
-                                        $dbModel->query("SELECT * FROM mybillmyright.mst_dept_user where distcode ='$distcode' and roletypecode = '04'
-ORDER BY userid ASC ");
-                                            $listdcs = $dbModel->resultSet1();
-                            ?>
-                          
-                            <div class="row">  <!-- DIv Start --->
-                            <!-- <div class="col-md-2" >
-                            <label class=""></label>
-                                <div class="form-group row">
-                                    <div class="col-sm-12">
-                                    <button class="btn btn-danger revert_back_btn" onclick="revert_back_to_dc_one()" ><i class="fa fa-thumbs-down" aria-hidden="true"></i> Revert Back</button>
-                                     <input type="hidden" name="action" id="action" />
-                                        <input type="hidden" name="ids" id="ids" />
-                                    </div>
-                                </div>
-                            </div> -->
-                              <div class="col-md-2">
-                                <label class=""></label>
-                                    <div class="form-group row">
-                                        <div class="col-sm-12">
-
                        
-                                      
-
-
-
-                                        </div>
                                     </div>
-                            </div>
-                            <div class="col-md-6">
-                            
-                            </div>
-                           
-                          <!--  <div class="col-md-2">
-                                <label class=""></label>
-                                    <div class="form-group row">
-                                        <div class="col-sm-12">
-                                        <button class="btn btn-success forward-btn" data-action="forward" onclick="verify_to_ac_one()"><i class="fa fa-thumbs-up" aria-hidden="true" ></i> Verify </button> 
-                                        <input type="hidden" name="action" id="action" />
-                                        <input type="hidden" name="ids" id="ids" />
-                                        </div>
-                                    </div>
-                            </div>-->
-                            
-                        </div>
-                        <br>
-
-
-
-
-                       <?php }
-                        
-                        // @stalin
-                        
-                      
-                        
-                        ?>
-                                    </div>
-                                        <thead>
+                                    <thead>
                                             <tr>
-                                                <th><input name="select_all" value="1" type="checkbox" id="multipleCheckbox"></th>
-                                                <th>District Name</th>
+                                                
+                                                <th></th>
+                                                <!-- <th>District Name</th> -->
                                                 <th style="text-align: center;">Invoice Details</th>
-                                                <th style="text-align: center;">Invoice Amount( <i class="fa fa-inr" aria-hidden="true"></i>)</th>
+                                                <!-- <th style="text-align: center;">Invoice Amount( <i class="fa fa-inr" aria-hidden="true"></i>)</th> -->
                                                 <th>Action</th>
-                                                <th style="text-align: center;">Order <br>ID</th>
+                                                <?php
+
+
+                                                if($roletypecode == "02"){
+
+
+                                                echo '
+                                                    <th>order <br>ID </th>
+                                                ';
+                                                }
+                                                else{
+
+
+                                                    echo '
+                                                    <th style="text-align: center;" class="none">order <br>ID </th>
+                                                    ';
+
+
+                                                }
+
+
+                                                ?>
+
                                                 <th>Remarks</th>
                                                 <th>Status</th>
                                                 <?php 
@@ -534,14 +330,14 @@ ORDER BY userid ASC ");
                                                 if($roletypecode == "02"){
 
                                                     echo '
-                                                     <th>Userd Name </th>
+                                                     <th>User Name </th>
                                                      <th>Mobile Number</th>
                                                      <th>Invoice <br> copy</th>';
                                                 }
                                                 else{
 
                                                      echo '
-                                                     <th class="none" >Userd Name </th>
+                                                     <th class="none" >User Name </th>
                                                      <th class="none">Mobile Number</th>
                                                      <th class="none">Invoice copy</th>';
 
@@ -557,9 +353,7 @@ ORDER BY userid ASC ");
 
                                     </table>
                                     
-                                    <p class="form-group" style="text-align:center">
-                                        <button type="submit" class="btn btn-success">Submit</button>
-                                    </p><!-- 
+                                   <!-- 
  <input type="hidden1" id="hidden_data"> -->
 
 <input type="hidden" name="ids" id="ids" />
@@ -617,6 +411,7 @@ ORDER BY userid ASC ");
         session_roleid='<?php echo $session_roleid?>';
         $(document).ready(function(){
             $("#test_button_action").click(function(){
+                debugger;
                 var district         = $("#distid option:selected").val();
                 var districtText         = $("#distid option:selected").text();
                 var seed_value    =  $("#seedvalue").val();
@@ -626,16 +421,255 @@ ORDER BY userid ASC ");
                 var bill_month       = $("#bill_month option:selected").val();
                
                 var yearmonth        = bill_year.concat(bill_month);
-                var min              = -1;
-                var max              = 1
-                var random           = (Math.random() * (max - min) + min);
-                let num              = random;
-                let seedValue        = num.toString().substring(0,4);
-                var distename = $("#distid option:selected").text();
+                
+                let seedValue        = seed_value;
+                fetch_data_auto_load(selectCountValue, yearmonth, seedValue, district, actionfunc = 'test_allotment', 'all');
             });
 
 
         });
+        function fetch_data_auto_load(selectCountValue, yearmonth, seedValue, district, actionfunc, bill_status) {
+    
+    var formData = {
+        select_count_value: selectCountValue,
+        yearmonth: yearmonth,
+        seedValue: seedValue,
+        district: district,
+        act: actionfunc,
+        bill_status: bill_status,
+    };
+    if (district != 'all' && actionfunc == 'test_allotment') {
+        $('#testdataTableBody').show();
+        $('#testSelectionTable').show();
+        displayDatatable(formData);
+       // location.reload();
+    }
+    else {
+        //emptyTableChecking(formData, district);
+
+    }
+}
+
+function displayDatatable(formData) {  //DisplayDatatable if start
+    //@stalin
+
+    var baseurl = siteurl + '/Allotment/FetchingAllotmentDataAuto';
+    var userDataTable = $('#testSelectionTable').DataTable({ //Datatable Start
+        "fnInitComplete": function (oSettings) {
+            if (oSettings.aiDisplayMaster.length <= 0) {
+                $("#testdataTableBody").hide();
+            }
+        },
+        "rowCallback": function (row, data, index) {
+            if (index % 2 == 0) {
+                $(row).removeClass('myodd myeven');
+                $(row).addClass('myodd');
+            } else {
+                $(row).removeClass('myodd myeven');
+                $(row).addClass('myeven');
+            }
+        },
+        'processing': true,
+        'serverSide': true,
+        'serverMethod': 'post',
+        'paging': true,
+        'pageLength': 5,
+        //      scrollY:        "300px",
+        // scrollX:        true,
+        // scrollCollapse: true,
+
+
+
+        'lengthMenu': [[5, 10, 20, -1], [5, 10, 20, "All"]],
+        'iDisplayLength': -1,
+        'ajax': {
+            'url': baseurl,
+            data: formData,
+        },
+        // autoWidth: false,
+
+        'destroy': true,
+
+        responsive: true,
+        //     responsive: {
+        //     details: {
+        //         type: 'column'
+        //     }
+        // },
+
+
+
+        'columns': [
+            { "data": "bill_selection_id", "name": "bill_selection_id" },
+            // { "data": "distename","name": "distename"},
+            { "data": "billnumber", "name": "billnumber" },
+            // { "data": "billamount","name": "billamount"},
+            { "data": "action", "name": "action" },
+            { "data": "order_by_column", "name": "order_by_column" },
+            { "data": "remarks", "name": "remarks" },
+            { "data": "status", "name": "status" },
+            { "data": "username", "name": "username" },
+            { "data": "mobilenumber", "name": "mobilenumber" },
+            { "data": "invoicecopy", "name": "invoicecopy" },
+
+        ],
+
+
+        'columnDefs': [
+            {
+
+                responsivePriority: 1,
+
+                targets: 0,
+
+
+                // className: 'dtr-control',
+                orderable: false,
+                // 'checkboxes': {
+                //     'selectRow': true
+                // }
+            },
+
+            {
+
+                responsivePriority: 2,
+
+                targets: -5,
+
+
+
+            },
+            {
+
+                width: 95,
+
+                targets: 4,
+
+
+
+            },
+
+
+
+
+        ],
+        //  order: [ 0, 'asc' ],
+        "ordering": false,
+        'select': {
+            'style': 'multi'
+        },
+
+    }); // DataTable End
+
+    if (session_roleid == '02') {
+
+
+        var dt = $('#testSelectionTable').DataTable();
+        //hide the first column
+        dt.columns([0,2, 4, 5]).visible(false);
+
+        // location.reload();
+
+
+
+    }
+    else {
+
+        jQuery('.dt-checkboxes-select-all').closest('tr').find('[type=checkbox]').hide();
+
+
+        var dt = $('#testSelectionTable').DataTable();
+        //hide the first column
+        //dt.columns([0]).visible(false);
+        //dt.columns([4,5,6,7]).visible(true);
+
+    }
+
+
+
+
+    //$('.dt-checkboxes').attr('name', 'test');
+
+    // $('#testSelectionTable .dt-checkboxes').eq(0).attr('name', 'yourNewname1');
+
+
+
+
+    $('#frm-example').on('submit', function (e) { // 28 Form submit start 
+
+
+
+        // Prevent actual form submission
+        e.preventDefault();
+        if (session_roleid == '02') { //ADC
+
+            forward_to_jc_one();
+        } //ADC END
+        else { // Not ADC
+
+          
+       
+
+           
+
+            // $('#dc_confirmation_alert').modal('show');
+            // Serialize form data
+            var data = userDataTable.$('input,select,textarea').serializeArray();
+
+
+            // Submit form data via Ajax
+            $.ajax({ //Ajax Start 
+                url: siteurl + '/Allotment/getResultsEachRows',
+                dataType: "json",
+                type: 'POST',
+                data: data,
+                success: function (data) {
+
+                   
+
+                  
+
+                    if (data.message == "true") {
+
+                       
+                        //  if(data.process_code == 'F'){
+
+
+                        if (session_roleid == '03') { //jc
+
+
+                            $('#dc_confirmation_alert').modal('show');
+                        }
+                        else if (session_roleid == '04') { //dc
+                            //   $('#ac_success_message').modal('show');
+                            $('#dc_confirmation_alert').modal('show');
+                        }
+                        else if (session_roleid == '05') { //dc
+                            //   $('#ac_success_message').modal('show');
+                            $('#dc_confirmation_alert').modal('show');
+                        }
+
+
+                    }
+                    else {
+                        $('#select_any_checkbox').modal('show');
+
+                    }
+
+                }
+            });  //Ajax End
+
+
+
+        }// Not ADC
+
+
+    }); //Form Submit End
+
+
+
+} //DisplayDatatable if End
+
 
     </script>
 

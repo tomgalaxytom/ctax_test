@@ -1785,6 +1785,10 @@ FROM mybillmyright.bill_selection_details WHERE year_month IN ('$year_month')";
                     inner join mybillmyright.mst_user mu on  bs.userid = mu.userid where bs.p_status='0' $searchQueryCondition ORDER BY ".$columnName." ".$columnSortOrder."";
         }
 
+
+        //echo $query1;
+       // exit;
+
         
 
                    

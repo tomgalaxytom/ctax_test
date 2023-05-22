@@ -8,13 +8,6 @@
      define('DB_NAME', 'ctax_test');
      define('DB_PORT', '5432');
 
-
-
-
-
-
-
-
     define('BASE_PATH', realpath(__DIR__ . "/../../") );
     define('APP_PATH', BASE_PATH . DIRECTORY_SEPARATOR . "app");
     define('PUBLIC_PATH', BASE_PATH . DIRECTORY_SEPARATOR . "public");
