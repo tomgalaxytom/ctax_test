@@ -988,3 +988,33 @@
     </div>
 </div>
 <!-- Stalin Thomas-->
+
+
+
+
+<div class="modal fade" id="select_any_checkbox_remarks" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#06163a;">
+
+                <h3 id="alert_header" class="text-white">Allotment Confirmation</h3>
+
+                <button type="button" id="button_close" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                 
+
+                    <p id="alert_body">
+                      Please Select Invoice And Remarks detail
+</p>
+                    <div class="mb-3"></div>
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="ok_button" onclick="reload_function()" >Ok</button>
+                    
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>

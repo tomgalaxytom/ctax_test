@@ -238,6 +238,9 @@ $verifyfilePathLength = $value['filepath'];
                  $billAmountWithZero  = $value['billamount'].".00";
                  $invoiceDetails     .= "<b>Bill Amount : </b>".$billAmountWithZero."<br>";
                  $invoiceDetails     .= "<b>District : </b>".$value['distename']."<br>";
+                // $invoiceDetails     .= "<b>Order Id : </b>".$value['order_by_column']."<br>";
+                // $invoiceDetails     .= "<b>User Name : </b>".$value['name']."<br>";
+               //  $invoiceDetails     .= "<b>Mobile Number : </b>".$value['mobilenumber']."<br>";
 
                   $order_id          = "<h6 style='text-align:center;'>".$value['order_by_column']."</h6>";
                   $Basemodel = new Basemodel;
@@ -312,6 +315,7 @@ $verifyfilePathLength = $value['filepath'];
                    
                         <li><i class='far fa-comment-dots' style='color:red;font-size:15px'></i> " .  $rm_message . "</li>
                      </ul>";
+                     $invoiceDetails     .= '<b>Process Status : </b><i class="fa fa-undo" aria-hidden="true" style="color:red"></i> <style="color:red">Return </p><br>';
 
                         }
 
@@ -336,12 +340,12 @@ $verifyfilePathLength = $value['filepath'];
                  }
                  $status_message .="</ul>";
                  $mobilenumber = '';
-                 $mobilenumber .= $value['mobilenumber']."<input type ='hiddenq' name='bsid[]' value= " . $value['bill_selection_id'] . ">";
+                 $mobilenumber .= $value['mobilenumber']."<input type ='hidden' name='bsid[]' value= " . $value['bill_selection_id'] . ">";
 
                  $kj = $j+1;
 
                  $bill_selection_id = '';
-                 $bill_selection_id .= "<input type ='checkbox' name='r{$kj}_checkbox' value= " . $value['bill_selection_id'] . ">";
+                 $bill_selection_id .= "<input type ='checkbox'  name='r{$kj}_checkbox' value= " . $value['bill_selection_id'] . ">";
 
 
                 
@@ -585,6 +589,7 @@ $verifyfilePathLength = $value['filepath'];
                                         $y = date('Y');
                                         $m = date('m');
                                         $curmonth = $y.$m;
+                                        $district = $district ;
 
                                          //$finalcount = $totalCount *  $scountvalue;
                                     }
@@ -597,6 +602,7 @@ $verifyfilePathLength = $value['filepath'];
                                     "results"  => $results,
                                      "scountvalue"=>$scountvalue ,
                                      "curmonth"=>$curmonth ,
+                                     "district" =>$district 
                                    
                                    
                                     
@@ -1093,7 +1099,9 @@ $verifyfilePathLength = $value['filepath'];
             else
             {
                     $_POST  = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
-                    $district            = $_POST['district'];
+                    $district            = ($_POST['district']==false?"all":$_POST['district']);
+
+                    
                     $session_details    =   $this->Mybill->session_details();
                     $session_roleid     =   $session_details[0]->roletypecode;
                     $role_type_id       = $session_roleid;
@@ -1106,6 +1114,7 @@ $verifyfilePathLength = $value['filepath'];
                                  
                                     $message = "true";
                                     $count = $forward_to_bill_selection;
+                                    $district = $district;
                                     
                                 }
                                 else{
@@ -1114,7 +1123,8 @@ $verifyfilePathLength = $value['filepath'];
                                 }
                                 $response = array(
                                     "message" => $message,
-                                    "count" => $count
+                                    "count" => $count,
+                                    "district" => $district
                                     );
                                     echo json_encode($response);
                                    exit;

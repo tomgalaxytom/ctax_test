@@ -1,6 +1,6 @@
 
 
-var siteurl = "http://localhost/projects/ctax_test/";
+var siteurl = "http://10.163.2.160/projects/ctax_test/";
 
 
 
@@ -53,6 +53,7 @@ window.onload = function () {
             }
         },
         submitHandler: function (form) { // submit handler start
+            
             event.preventDefault();
             var form_data = $('#allotment_form').serialize(); // All form data in a form_data variable.
 
@@ -62,6 +63,7 @@ window.onload = function () {
             var selectCountValue = (selectCountValue1 == "") ? "" : selectCountValue1;
 
             var district = $("#distid option:selected").val();
+            
 
 
             var bill_year = $("#bill_year option:selected").val();
@@ -80,7 +82,13 @@ window.onload = function () {
                 },
                 success: function (data, textStatus, jqXHR) {
                     if (jqXHR.status == '200') {
+                        
                         if (data.message == 'true') { //message if
+                       
+
+                            if(data.district !="all"){ //individual district start
+
+                          
 
                             var trHTML = '';
 
@@ -94,6 +102,8 @@ window.onload = function () {
                             var districtname = data.results[0].districtname;
                             var scountvalue = data.scountvalue;
                             //var curmonth = data.curmonth;
+
+                            
 
                             var curmonth = '202304';
                             var yymmfromdb = data.results[0].yyyymm;
@@ -130,39 +140,44 @@ window.onload = function () {
                                         $('#allotment_confirmation_alert').modal('show');
 
                                     }
-                                    //         if(bscount == 0){
-
-                                    //             var trHTML = '';
-                                    //             var finalcount = data.results[0].bill_selection_count* parseInt(data.scountvalue);
-                                    //   trHTML +='<tr><td>' + data.results[0].districtname + '</td><td>' +data.results[0].bill_selection_count.toString() + '</td><td>' +data.scountvalue + '</td><td>' +finalcount + '</td></tr>';
-                                    //   $('#records_table').append(trHTML);
-                                    //   $('#allotment_confirmation_alert').modal('show');
-
-                                    //         }
-                                    //         else{
-                                    //             var check = bill_selection_count * scountvalue;
-                                    //             if(check > bscount){
-                                    //                 alert("Enter Small Digit No compared this value of "+scountvalue)
-                                    //             }
-                                    //             else{
-
-                                    //             }
-                                    //         }
+                                    
                                 }
 
                             }
 
 
+                                  }//individual district end
+                                  else{ // district all 
 
+                                    var trHTML = '';
 
+                                   // var finallyCount = "";
+                                   
+                                    var total = 0;
 
-                            //countChecking(data.results[index].distcode);
+                                     $.each(data.results, function(index) {
+                                        var scountvalue = 1;
+                                        var finalcount = data.results[index].bill_selection_count * 1;
+                                      //  var finalTextValue = finalcount+1;
+                                        trHTML += '<tr><td id="distename">' + data.results[index].districtname + '</td><td>' + data.results[index].bill_selection_count.toString() + '</td><td>' + scountvalue + '</td><td>' + finalcount + '</td></tr>';
+                                        $('#records_table').html(trHTML);
 
-                            // });
+                                        
+                                        total += finalcount;
+                                        $('#totalmembers').html(total);
+                                        $('#districtname').html("Total ");
+                                        $('#allotment_confirmation_alert').modal('show');
+                                  });
+                                 
 
-                            //$('#records_table').append(trHTML);
-                            //$('#allotment_confirmation_alert').modal('show');
+                                  $('#distid').prop('disabled', true);
+                                  $('#bill_year').prop('disabled', true);
+                                  $('#bill_month').prop('disabled', true);
+                                  $('#flexCheckChecked').prop('disabled', true);
+                                  $('#button_action').prop('disabled', true);
+                                  $('#alloted_detail_btn').prop('disabled', true);
 
+                                  } // district all 
 
 
 
@@ -267,6 +282,19 @@ function fun_close() {
     valiator.resetForm();
 
 }
+
+
+// $('#allcb').change(function(){
+//     if($(this).prop('checked')){
+//         $('tbody tr td input[type="checkbox"]').each(function(){
+//             $(this).prop('checked', true);
+//         });
+//     }else{
+//         $('tbody tr td input[type="checkbox"]').each(function(){
+//             $(this).prop('checked', false);
+//         });
+//     }
+// });
 function fetch_data(selectCountValue, yearmonth, seedValue, district) {
     //  $("#datatables").html(`<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>`);
 
@@ -314,6 +342,7 @@ $('#bill_status').on('change', function (e) {
 
 function fetch_data_auto_load(selectCountValue, yearmonth, seedValue, district, actionfunc, bill_status) {
     
+    
     var formData = {
         select_count_value: selectCountValue,
         yearmonth: yearmonth,
@@ -327,8 +356,19 @@ function fetch_data_auto_load(selectCountValue, yearmonth, seedValue, district, 
         displayDatatable(formData);
         location.reload();
     }
-    else {
-        emptyTableChecking(formData, district);
+    else if(district = 'all' && actionfunc == 'form-submit'){
+
+        $('#dataTableBody').show();
+        displayDatatable(formData);
+       // location.reload();
+      // $('#distid').hide();
+       
+       $('#distid').prop('disabled', true);
+
+    }
+   else {
+        
+        emptyTableChecking(formData, formData.district);
 
     }
 }
@@ -346,12 +386,17 @@ function emptyTableChecking(formData, district) {
         success: function (data, textStatus, jqXHR) {
             if (jqXHR.status == '200') {
                 
+                
                 if (data.message == 'true' && data.count > 0) {
+
+                    
 
 
 
                     displayDatatable(formData);
                     $('#dataTableBody').show();
+                    
+                   // location.reload();
                 }
                 else {
                     $('#dataTableBody').hide();
@@ -432,7 +477,7 @@ function displayDatatable(formData) {  //DisplayDatatable if start
             { "data": "billnumber", "name": "billnumber" },
             // { "data": "billamount","name": "billamount"},
             { "data": "action", "name": "action" },
-            { "data": "order_by_column", "name": "order_by_column" },
+           { "data": "order_by_column", "name": "order_by_column" },
             { "data": "remarks", "name": "remarks" },
             { "data": "status", "name": "status" },
             { "data": "username", "name": "username" },
@@ -534,6 +579,8 @@ function displayDatatable(formData) {  //DisplayDatatable if start
         } //ADC END
         else { // Not ADC
 
+
+            
           
        
 
@@ -541,7 +588,7 @@ function displayDatatable(formData) {  //DisplayDatatable if start
 
             // $('#dc_confirmation_alert').modal('show');
             // Serialize form data
-            var data = userDataTable.$('input,select,textarea').serializeArray();
+            var data = userDataTable.$('input,select,textarea,checkbox').serializeArray();
 
 
             // Submit form data via Ajax
@@ -571,7 +618,7 @@ function displayDatatable(formData) {  //DisplayDatatable if start
                             //   $('#ac_success_message').modal('show');
                             $('#dc_confirmation_alert').modal('show');
                         }
-                        else if (session_roleid == '05') { //dc
+                        else if (session_roleid == '05') { //ac
                             //   $('#ac_success_message').modal('show');
                             $('#dc_confirmation_alert').modal('show');
                         }
@@ -579,7 +626,15 @@ function displayDatatable(formData) {  //DisplayDatatable if start
 
                     }
                     else {
-                        $('#select_any_checkbox').modal('show');
+                        if (session_roleid == '05') {
+
+                            $('#select_any_checkbox_remarks').modal('show');  
+                       
+                        }
+                        else{
+                            $('#select_any_checkbox').modal('show');
+                        }
+                       
 
                     }
 
@@ -618,7 +673,8 @@ function allotment_fetch_data() {
     // var table = $('#billSelectionTable').DataTable();
     // table.destroy();
     //;
-    var selectCountValue = $("#menu").val();
+    
+    var selectCountValue = ($("#menu").val()=="")?"":$("#menu").val();
     var bill_year = $("#bill_year option:selected").text();
     var bill_month = $("#bill_month option:selected").val();
     var district = $("#distid option:selected").val();
@@ -757,7 +813,7 @@ function role_forward(dc_value, remarks, id) {
         var role_type_id = "03";
         var role_type_name = "JC";
         var dc_name = '';
-        var remarks = "Forward To  JC";
+        var remarks = "";
     }
     else if (session_roleid == "03") {
         var role_type_id = "04";
@@ -853,7 +909,7 @@ $(".action-btn").on('click', function (e) {
     e.preventDefault;
 
     
-debugger;
+
     $("#action").val($(this).data('action'));
 
     let action_value = $("#action").val();

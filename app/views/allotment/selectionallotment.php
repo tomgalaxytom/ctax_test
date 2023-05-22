@@ -90,23 +90,55 @@ include('./././public/dash/layout/sidebar.php');
                                             //print_r($array);
 
                                             //$alreadyBillSelectedDistricts = [610,586];
-                                            $count = count($alreadyBillSelectedDistricts);
+                                          //  $count = count($alreadyBillSelectedDistricts);
                                            // print_r($alreadyBillSelectedDistricts);
-                                            $database->query("select  d.distcode,d.distename from  mybillmyright.mst_district d
-                                            inner join mybillmyright.billdetail c on d.distcode = c.distcode
-                                            group by d.distcode,d.distename order by d.distename asc");
+                                            // $database->query("select  d.distcode,d.distename from  mybillmyright.mst_district d
+                                            // inner join mybillmyright.billdetail c on d.distcode = c.distcode
+                                            // group by d.distcode,d.distename order by d.distename asc");
+                                            // $data = $database->resultSet1();
+
+                                            $database->query("SELECT
+                                            distinct bd.distcode,(select distename from mybillmyright.mst_district where distcode =mc.distcode ) as distename,
+                                            mc.bill_selection_count,TO_CHAR(mc.billentryenddate, 'YYYYMM') as yyyymm
+                                        FROM
+                                            mybillmyright.billdetail bd
+                                        INNER JOIN mybillmyright.mst_config mc 
+                                            ON bd.distcode = mc.distcode
+                                             where TO_CHAR(mc.billentryenddate, 'YYYYMM') = '202304'");
                                             $data = $database->resultSet1();
+                                          
+
 
 
                                             //count
 
                                             $database2 = new database;
 
-                                            $database2->query("select  count(distinct(distcode)) from mybillmyright.billdetail");
+                                            $database2->query("select count(distinct distcode) from  mybillmyright.bill_selection_details");
                                              $datacount = $database2->single();
+
+
+
+                                             $database34 = new database;
+
+                                             $database34->query("SELECT
+                                             count(distinct bd.distcode)
+                                         FROM
+                                             mybillmyright.billdetail bd
+                                         INNER JOIN mybillmyright.mst_config mc 
+                                             ON bd.distcode = mc.distcode
+                                              where TO_CHAR(mc.billentryenddate, 'YYYYMM') = '202304'");
+                                              $datacountfirst = $database34->single();
+
+
+                                              
+
+
+
+                                             
                                              
 
-                                             if($count ==  $datacount->count){
+                                             if($datacountfirst->count ==  $datacount->count){
                                                  $m = 'disabled';
                                              }
                                              else{
@@ -118,16 +150,16 @@ include('./././public/dash/layout/sidebar.php');
 
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                        <label class=" col-form-label required">Select Districts By stalin</label>
+                                                        <label class=" col-form-label required">Select Districts</label>
                                                         <div class="form-group row">
                                                             <div class="col-sm-4">
-                                                            <select class="form-select " name="distid"  <?php echo $m;?> id="distid" >
+                                                            <select class="form-select " <?php echo $m;?> name="distid"  <?php echo $m;?> id="distid" >
   
 
 
 
-                                                                 <!-- <option 
-                                                                value='all'>---- All ----</option>  -->
+                                                                 <option 
+                                                                value='all' >---- All ----</option> 
                                                                 <?php 
                                                                 foreach ($data as $value) 
                                                                 {
@@ -172,14 +204,14 @@ include('./././public/dash/layout/sidebar.php');
                                                         <?php
                                                         $latest_year = date('Y');
                                                         ?>
-                                                                 <select class=" form-select"  name="bill_year" id="bill_year">
-                                                                    <option value="<?php echo $latest_year;?>"><?php echo $latest_year;?></option>
+                                                                 <select class=" form-select"  name="bill_year" id="bill_year" <?php echo $m;?>>
+                                                                    <option  value="<?php echo $latest_year;?>"><?php echo $latest_year;?></option>
                                                                  </select>
                                                                 </div>
                                                             <div class="col-sm-4">
                                                             <label class=" col-form-label required">Month</label>
-                                                                <select  class="form-select"  name="bill_month" id="bill_month" >
-                                                                   <option value="04"><?php echo "April";?></option>  
+                                                                <select  class="form-select"  name="bill_month" id="bill_month" <?php echo $m;?> >
+                                                                   <option value="04" ><?php echo "April";?></option>  
 
                                                                 </select>
                                                             </div>
@@ -190,12 +222,26 @@ include('./././public/dash/layout/sidebar.php');
                                            <!-- Year, Month -->
 
 <br>
+<div class="row">
+                                                <div class="col-md-6">
+                                                    <label class=" col-form-label required">Rules Applied</label>
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-12">
+                                                        <ul>
+                                                            <li>April Month Bill For Allotment</li>
+                                                            <li>Only Finalized Details Details Take Allotment</li>
+                                                        </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
 
 
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="" name="flexCheckChecked"  required style="font-size:21px" id="flexCheckChecked" >
+                                                        <input <?php echo $m;?> class="form-check-input" type="checkbox" value="" name="flexCheckChecked"  required style="font-size:21px" id="flexCheckChecked" >
                                                         <label class="form-check-label" style ="margin-top:5px" for="flexCheckChecked">
                                                             I agree the terms and condition for Allotment Process
                                                         </label>
@@ -214,7 +260,7 @@ include('./././public/dash/layout/sidebar.php');
                                             <div style="text-align: center; ">
                                                 <input type="hidden" name="hidden_id" id="hidden_id" />
                                                 <input type="hidden" name="action" id="action" value="insert" />
-                                                <input type="submit" name="button_action" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Submit" id="button_action" class="btn  btn-primary button_save " value="Process Allotment"  />
+                                                <input type="submit" name="button_action" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Submit" id="button_action" class="btn  btn-primary button_save " value="Process Allotment"  <?php echo $m;?> />
 
                                                 
 
@@ -502,12 +548,12 @@ ORDER BY userid ASC ");
                                                      <th>Mobile Number</th>
                                                      <th>Invoice <br> copy</th>';
                                                 }
-                                                else{
+                                                else {
 
                                                      echo '
                                                      <th class="none" >User Name </th>
                                                      <th class="none">Mobile Number</th>
-                                                     <th class="none">Invoice copy</th>';
+                                                     <th>Invoice copy</th>';
 
                                                 }
 

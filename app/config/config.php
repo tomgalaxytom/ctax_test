@@ -17,8 +17,8 @@
    // define('URLROOT', 'https://10.163.19.176/ctax_test/');
    // define('Filepath', 'https://10.163.19.176/ctax_test/upload/bills');
 
-    define('URLROOT', 'http://localhost/projects/ctax_test/');
-    define('FILEPATH', 'http://localhost/projects/ctax_test/uploads/');
+    define('URLROOT', 'http://10.163.2.160/projects/ctax_test/');
+    define('FILEPATH', 'http://10.163.2.160/projects/ctax_test/uploads/');
 
 
 

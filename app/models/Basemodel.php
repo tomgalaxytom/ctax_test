@@ -1065,13 +1065,45 @@ $yearmonth =date("Y").date('m');
          */
  public function getallotment_data_pf($countValue,$yearmonth,$seedValue,$district)
     {
+
+
+        $array = array(
+            'countvalue'=>$countValue,
+            'yearmonth' => $yearmonth,
+            'seedValue'=>$seedValue,
+            
+            '$district'=> $district
+
+        );
+
+        // echo '<pre>';
+        // print_r(  $array );
+        // exit;
+
+
+
+
+
          if($district == 'all'){
 
-            $query1               = "select distinct distcode from mybillmyright.billdetail";
+            $finalyearmonth = "20".$yearmonth;
+
+            $query1               = "SELECT
+            distinct bd.distcode,(select distename from mybillmyright.mst_district where distcode =mc.distcode ) as districtname,
+            mc.bill_selection_count,TO_CHAR(mc.billentryenddate, 'YYYYMM') as yyyymm
+        FROM
+            mybillmyright.billdetail bd
+        INNER JOIN mybillmyright.mst_config mc 
+            ON bd.distcode = mc.distcode
+             where TO_CHAR(mc.billentryenddate, 'YYYYMM') = '$finalyearmonth'";
+
+
+
             $this->db->query($query1);
             $fetchDistrictRecords = $this->db->resultSet1();
             foreach ($fetchDistrictRecords as $value) {
                 $distcode = $value['distcode'] ;
+                $countValue = $value['bill_selection_count'] ;
                 $sqlQuery = "select mybillmyright.getallotmentwinnerwithseed('$distcode','$countValue',$seedValue,'$yearmonth')";
                 $this->db->query($sqlQuery) ;
                 if ($this->db->execute()) {
@@ -1953,7 +1985,10 @@ public function forwardToBillSelection($data,$role_type_id,$logged_in_userid ){ 
                 if(isset($data['r'.$i."_checkbox"]) && $data['r'.$i."_checkbox"] !="" )
                  {  //if condition with Forloop
 
-                    if(isset($data['r'.$i."_processcode"]) && $data['r'.$i."_processcode"] =="V" ){//verified start
+                    if(isset($data['r'.$i."_processcode"]) && $data['r'.$i."_processcode"] =="V"  &&
+                    isset($data['r'.$i."_remarks"]) && $data['r'.$i."_remarks"] !=""
+                    
+                    ){//verified start
                         $bill_selection_id = $data['r'.$i."_bsid"];
                         $process_code      = $data['r'.$i."_processcode"];
                         $remarks           = ($data['r'.$i."_remarks"] !=""?$data['r'.$i."_remarks"] :"");
@@ -1966,7 +2001,10 @@ public function forwardToBillSelection($data,$role_type_id,$logged_in_userid ){ 
                     }//verified End
                     else{
 
-                        if(isset($data['r'.$i."_processcode"]) && $data['r'.$i."_processcode"] =="R" ){//Revert start
+                        if(isset($data['r'.$i."_processcode"]) && $data['r'.$i."_processcode"] =="R"
+                        &&
+                        isset($data['r'.$i."_remarks"]) && $data['r'.$i."_remarks"] !=""
+                        ){//Revert start
                             $bill_selection_id = $data['r'.$i."_bsid"];
                             $process_code      = $data['r'.$i."_processcode"];
                             $userid            = $data['r'.$i."_roleuserid"];
@@ -2288,9 +2326,18 @@ return $row;
       //$output =$this->printr(compact("selectCountValue","district","bill_year","bill_month")) ;
       if($district == "all"){
         $year_month = $bill_year.$bill_month;
-         $query = "select t.bill_selection_count,t.distcode ,TO_CHAR(t.billentryenddate, 'YYYYMM') as yyyymm ,
-(select distename from mybillmyright.mst_district where distcode =t.distcode ) as districtname
-FROM  mybillmyright.mst_config as t   where TO_CHAR(t.billentryenddate, 'YYYYMM') = '$year_month'";
+
+
+        $query = "SELECT
+        distinct bd.distcode,(select distename from mybillmyright.mst_district where distcode =mc.distcode ) as districtname,
+        mc.bill_selection_count,TO_CHAR(mc.billentryenddate, 'YYYYMM') as yyyymm
+    FROM
+        mybillmyright.billdetail bd
+    INNER JOIN mybillmyright.mst_config mc 
+        ON bd.distcode = mc.distcode
+         where TO_CHAR(mc.billentryenddate, 'YYYYMM') = '$year_month'";
+
+
           $this->db->query($query);
          $row = $this->db->resultSet1();
         return $row;
