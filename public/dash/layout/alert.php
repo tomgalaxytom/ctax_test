@@ -95,14 +95,7 @@
             <div class="modal-body">
                 <div class="container">
                 <table id="records_table" class="table table-bordered">
-                 <thead>
-                    <tr>
-                        <th>District</th>
-                        <th>Zonal</th>
-                        <th>Count</th>
-                        <th>Total</th>
-                    </tr>
-                 </thead>
+                 
                  <tbody>
                     
                  </tbody>

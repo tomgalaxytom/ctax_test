@@ -76,9 +76,14 @@ include('./././public/dash/layout/sidebar.php');
                                             //$alreadyBillSelectedDistricts = [610,586];
                                             $count = count($alreadyBillSelectedDistricts);
                                            // print_r($alreadyBillSelectedDistricts);
-                                            $database->query("select  d.distcode,d.distename from  mybillmyright.mst_district d
-                                            inner join mybillmyright.billdetail c on d.distcode = c.distcode
-                                            group by d.distcode,d.distename order by d.distename asc");
+                                            $database->query("SELECT
+                                            distinct bd.distcode,(select distename from mybillmyright.mst_district where distcode =mc.distcode ) as distename,
+                                            mc.bill_selection_count,TO_CHAR(mc.billentryenddate, 'YYYYMM') as yyyymm
+                                        FROM
+                                            mybillmyright.billdetail bd
+                                        INNER JOIN mybillmyright.mst_config mc 
+                                            ON bd.distcode = mc.distcode
+                                             where TO_CHAR(mc.billentryenddate, 'YYYYMM') = '202304'");
                                             $data = $database->resultSet1();
 
 
@@ -167,17 +172,7 @@ include('./././public/dash/layout/sidebar.php');
                                             <br>
 
 
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedVerified" style="font-size:21px" id="flexCheckChecked" required >
-                                                        <label class="form-check-label" style ="margin-top:5px" for="flexCheckChecked">
-                                                        I agree the terms and condition for Allotment Process
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                
-                                            </div>
+                                           
 
                                            
 
@@ -189,7 +184,7 @@ include('./././public/dash/layout/sidebar.php');
                                             <div style="text-align: center; ">
                                                 <input type="hidden" name="hidden_id" id="hidden_id" />
                                                 <input type="hidden" name="action" id="action" value="insert" />
-                                                <input type="submit" name="verified_button_action" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Submit" id="verified_button_action" class="btn  btn-primary button_save " value="Verify Allotment" onclick="verify_fetch_data()" />
+                                                <input type="submit" name="verified_button_action" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Submit" id="verified_button_action" class="btn  btn-primary button_save " value="Submit" onclick="verify_fetch_data()" />
 
                                                 
 

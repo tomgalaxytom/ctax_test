@@ -1,11 +1,11 @@
 
 
-var siteurl = "http://10.163.2.160/projects/ctax_test/";
+var siteurl = "http://localhost/projects/ctax_test/";
 
 
 
 window.onload = function () {
-
+    
    
     //
     fetch_data_auto_load("", "", "", "all", "auto", "all");
@@ -131,10 +131,10 @@ window.onload = function () {
 
                                     }
                                     else {
-                                        var trHTML = '';
+    var trHTML = '';
                                         var finalcount = data.results[0].bill_selection_count * parseInt(data.scountvalue);
                                         trHTML += '<tr><td id="distename">' + data.results[0].districtname + '</td><td>' + data.results[0].bill_selection_count.toString() + '</td><td>' + data.scountvalue + '</td><td>' + finalcount + '</td></tr>';
-                                        $('#records_table').html(trHTML);
+                                        $('#records_table tbody').html(trHTML);
                                         $('#totalmembers').html(finalcount);
                                         $('#districtname').html(data.results[0].districtname);
                                         $('#allotment_confirmation_alert').modal('show');
@@ -149,7 +149,7 @@ window.onload = function () {
                                   }//individual district end
                                   else{ // district all 
 
-                                    var trHTML = '';
+                                    var trHTML = '<thead><tr><th>District</th><th>Zonal</th><th>Count</th><th>Total</th></tr></thead>';
 
                                    // var finallyCount = "";
                                    
@@ -300,17 +300,19 @@ function fetch_data(selectCountValue, yearmonth, seedValue, district) {
 
 
     fetch_data_auto_load(selectCountValue, yearmonth, seedValue, district, actionfunc = 'form-submit', 'all');
+ 
     if (session_roleid == '02') {
         var dt = $('#billSelectionTable').DataTable();
-        dt.columns([0,4, 5, 6]).visible(false);
-        // location.reload();
+     dt.columns([0,2,3,5]).visible(false);
+       
     }
     else {
         var dt = $('#billSelectionTable').DataTable();
-        dt.columns([4, 5, 6, 7]).visible(true);
+        
+        dt.columns([0,2,3,4,5,6,7]).visible(true);
+
+       // dt.columns([1]).visible(false);
     }
-
-
 
 
 
@@ -341,7 +343,8 @@ $('#bill_status').on('change', function (e) {
 
 
 function fetch_data_auto_load(selectCountValue, yearmonth, seedValue, district, actionfunc, bill_status) {
-    
+
+  
     
     var formData = {
         select_count_value: selectCountValue,
@@ -351,6 +354,8 @@ function fetch_data_auto_load(selectCountValue, yearmonth, seedValue, district, 
         act: actionfunc,
         bill_status: bill_status,
     };
+
+    debugger;
     if (district != 'all' && actionfunc == 'form-submit') {
         $('#dataTableBody').show();
         displayDatatable(formData);
@@ -358,9 +363,21 @@ function fetch_data_auto_load(selectCountValue, yearmonth, seedValue, district, 
     }
     else if(district = 'all' && actionfunc == 'form-submit'){
 
+      //  alert(formData.seedValue)
+
+      localStorage.setItem("seed_value", formData.seedValue);
+
+
+
         $('#dataTableBody').show();
         displayDatatable(formData);
-       // location.reload();
+        //  var dt = $('#billSelectionTable').DataTable();
+        // // dt.columns([0,2, 3, 5]).visible(false);
+
+
+        // dt.columns([0,3,4,6]).visible(false);
+        // dt.columns([1,2,5]).visible(true);
+        location.reload();
       // $('#distid').hide();
        
        $('#distid').prop('disabled', true);
@@ -391,10 +408,22 @@ function emptyTableChecking(formData, district) {
 
                     
 
-
+                       debugger;
+                    
 
                     displayDatatable(formData);
+                    
                     $('#dataTableBody').show();
+
+                    //seed value
+
+
+                    
+
+                    $('#seed_value').val(localStorage.getItem("seed_value"));
+                
+
+                   
                     
                    // location.reload();
                 }
@@ -426,12 +455,16 @@ function displayDatatable(formData) {  //DisplayDatatable if start
     //@stalin
 
     var baseurl = siteurl + '/Allotment/FetchingAllotmentDataAuto';
+    //$('#billSelectionTable').dataTable().fnDestroy();
+    
     var userDataTable = $('#billSelectionTable').DataTable({ //Datatable Start
+        
         "fnInitComplete": function (oSettings) {
             if (oSettings.aiDisplayMaster.length <= 0) {
                 $("#dataTableBody").hide();
             }
         },
+        
         "rowCallback": function (row, data, index) {
             if (index % 2 == 0) {
                 $(row).removeClass('myodd myeven');
@@ -458,11 +491,12 @@ function displayDatatable(formData) {  //DisplayDatatable if start
             'url': baseurl,
             data: formData,
         },
-        // autoWidth: false,
+         autoWidth: false,
 
         'destroy': true,
+        fixedColumns: true,
 
-        responsive: true,
+       // responsive: true,
         //     responsive: {
         //     details: {
         //         type: 'column'
@@ -473,88 +507,81 @@ function displayDatatable(formData) {  //DisplayDatatable if start
 
         'columns': [
             { "data": "bill_selection_id", "name": "bill_selection_id" },
-            // { "data": "distename","name": "distename"},
+             { "data": "distename","name": "distename"},
             { "data": "billnumber", "name": "billnumber" },
             // { "data": "billamount","name": "billamount"},
             { "data": "action", "name": "action" },
-           { "data": "order_by_column", "name": "order_by_column" },
+           //{ "data": "order_by_column", "name": "order_by_column" },
             { "data": "remarks", "name": "remarks" },
-            { "data": "status", "name": "status" },
-            { "data": "username", "name": "username" },
-            { "data": "mobilenumber", "name": "mobilenumber" },
             { "data": "invoicecopy", "name": "invoicecopy" },
+            { "data": "status", "name": "status" },
+            // { "data": "username", "name": "username" },
+            // { "data": "mobilenumber", "name": "mobilenumber" },
+           
 
         ],
 
 
         'columnDefs': [
-            {
+            // { width: 5, targets: 0 },
+            // { width: 10, targets: 1 },
+            // { width: 10, targets: 2 },
+            // { width: 10, targets: 3 },
+            // { width: 10, targets: 4 },
+            // { width: 10, targets: 5 },
+            // { width: 10, targets: 6 },
+            
+            // {
 
-                responsivePriority: 1,
+            //     responsivePriority: 1,
 
-                targets: 0,
-
-
-                // className: 'dtr-control',
-                orderable: false,
-                // 'checkboxes': {
-                //     'selectRow': true
-                // }
-            },
-
-            {
-
-                responsivePriority: 2,
-
-                targets: -5,
+            //     targets: 0,
+            //     width:10,
 
 
+            //    //  className: 'dtr-control',
+            //     orderable: false,
+               
+            //     // 'checkboxes': {
+            //     //     'selectRow': true
+            //     // }
+            // },
 
-            },
-            {
+            // {
 
-                width: 95,
-
-                targets: 4,
+               
 
 
 
-            },
+            // },
+            
 
 
 
 
         ],
         //  order: [ 0, 'asc' ],
-        "ordering": false,
-        'select': {
-            'style': 'multi'
-        },
+       // "ordering": false,
+        // 'select': {
+        //     'style': 'multi'
+        // },
 
     }); // DataTable End
 
+    debugger;
+
     if (session_roleid == '02') {
-
-
         var dt = $('#billSelectionTable').DataTable();
-        //hide the first column
-        dt.columns([0,2, 4, 5]).visible(false);
-
-        // location.reload();
-
-
-
+     dt.columns([0,3,4,6]).visible(false);
+     dt.columns([1,2,5]).visible(true);
+       
     }
     else {
-
-        jQuery('.dt-checkboxes-select-all').closest('tr').find('[type=checkbox]').hide();
-
-
         var dt = $('#billSelectionTable').DataTable();
-        //hide the first column
-        //dt.columns([0]).visible(false);
-        //dt.columns([4,5,6,7]).visible(true);
+        
+        dt.columns([0,1,2,3,4,5,6]).visible(true);
 
+       // dt.columns([1]).visible(false);
     }
 
 
@@ -660,13 +687,15 @@ function ajax_function_call() {
 
 
 function cancel_confirmation_box() {
+    debugger;
     $('#allotment_confirmation_alert').modal('hide');
     $('#distid').prop('disabled', false);
     $('#records_table tbody').empty();
 
     $('#bill_year').prop('disabled', false);
     $('#bill_month').prop('disabled', false);
-    // $('#flexCheckChecked').removeattr('disabled', 'disabled');
+    $('#flexCheckChecked').prop('disabled', false);
+    $('#button_action').prop('disabled', false);
     $('#menu').prop('disabled', false);
 }
 function allotment_fetch_data() {
@@ -907,6 +936,8 @@ function role_forward(dc_value, remarks, id) {
 // Handle form submission event
 $(".action-btn").on('click', function (e) {
     e.preventDefault;
+
+    debugger;
 
     
 

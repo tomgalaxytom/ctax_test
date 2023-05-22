@@ -116,13 +116,13 @@ class Allotment extends Controller
                  $kj = $j+1;
                  $fetchRecords12 = ($Basemodel->getMultipleData($status, $id));
                  $fetch_roles = '';
-                 $fetch_roles .= "<select name='r{$kj}_roleuserid' id='roleuserid' class='form-select roleuserid' style='width:200px'>";
+                 $fetch_roles .= "<select name='r{$kj}_roleuserid' id='roleuserid' class='form-select roleuserid' style='width:80% !important;font-size:10px'>";
                   foreach($fetchRecords12 as $val){
                         $fetch_roles .= "<option value='" . $val->userid . "'>" . $val->name . "</option>";
                   }
                  $fetch_roles .="</select>";
                 $process_code = <<<TEXT
-                <select name="r{$kj}_processcode" id='processcode' class='form-select processcode'>
+                <select name="r{$kj}_processcode" id='processcode' class='form-select processcode' style='width:80% !important;font-size:10px'>
                 <option value='F'>Forward</option></select>
 TEXT;
                 $fianl_roles = $process_code.'<br>'.$fetch_roles ;
@@ -141,7 +141,7 @@ TEXT;
                 // print_r( $fetchjcs);
 
                 $fetch_roles = '';
-                $fetch_roles .= "<select name='r{$kj}_roleuserid' id='roleuserid' class='form-select' style='width:125px'>";
+                $fetch_roles .= "<select name='r{$kj}_roleuserid' id='roleuserid' class='form-select' style='width:80% !important;font-size:10px'>";
                 foreach($fetchRecords12 as $val){
                     $fetch_roles .= "<option value='" . $val->userid . "'>" . $val->name . "</option>";
                 }
@@ -155,10 +155,11 @@ TEXT;
 
 
                 // echo '<pre>';
+                //style='width:80% !important;font-size:10px'
                 // print_r( $fetchjcs);
 
                 $list_jc = '';
-                $list_jc .= "<select name='r{$kj}_jcs' id='listjc' class='form-select' style='width:125px;display:none'>";
+                $list_jc .= "<select name='r{$kj}_jcs' id='listjc' class='form-select' style='width:80% !important;font-size:10px;display:none'>";
                 foreach($fetchjcs as $jc){
                     $list_jc .= "<option value='" . $jc->userid . "'>" . $jc->name . "</option>";
                 }
@@ -169,7 +170,7 @@ TEXT;
 
 
                 $process_code = <<<TEXT
-                <select name="r{$kj}_processcode" id='processcode' class='form-select processcode'>
+                <select style='width:80% !important;font-size:10px' name="r{$kj}_processcode" id='processcode' class='form-select processcode'>
                 <option value='F'>Forward</option>
                 <option value='R'>Return</option></select>
 TEXT;
@@ -189,7 +190,7 @@ TEXT;
                  $uid  = $disadbled->updated_by;
                  $alreadyBillSelectedDistricts[] =   $uid;
                  $fetch_roles = '';
-                 $fetch_roles .= "<select name='r{$kj}_roleuserid' id='roleuserid' class='form-select roleuserid' style='width:200px;display:none !important'>";
+                 $fetch_roles .= "<select name='r{$kj}_roleuserid' id='roleuserid' class='form-select roleuserid' style='width:80% !important;font-size:10px;display:none !important'>";
                   foreach($fetchRecords12 as $val){
                     $disabledStr = in_array($val->userid, $alreadyBillSelectedDistricts) ? "" : "disabled";
                         $userid_wit_bill_id = $val->userid;
@@ -200,7 +201,7 @@ TEXT;
                  $fetch_roles .="</select>";
 
                 $process_code = <<<TEXT
-                <select name="r{$kj}_processcode" id='processcode' class='form-select processcode' >
+                <select name="r{$kj}_processcode" id='processcode' class='form-select processcode' style='width:105% !important;font-size:9px'>
                 <option value='V'>Verifed-Eligible</option>
                 <option value='VIE'>Verifed-InEligible</option>
                 <option value='R'>Sent Back</option>
@@ -211,8 +212,8 @@ TEXT;
             }
             if( $session_roleid =='03' || $session_roleid =='04' || $session_roleid =='05'){
                 $kj = $j+1;
-                    $remarks_button = "<textarea id='remarks' name='r{$kj}_remarks' rows='4' class='textAreaclass' maxlength='500' minlength='5' >
-</textarea><input type='hidden'  name ='r{$kj}_bsid' class='bsid' value='" . $value['bill_selection_id'] . "'>";
+                    $remarks_button = "<textarea id='remarks' name='r{$kj}_remarks' rows='4' class='textAreaclass'  >
+</textarea><br><input type='hidden'  maxlength='4' size='4' name ='r{$kj}_bsid' class='bsid' value='" . $value['bill_selection_id'] . "'>";
 
 $fileLocation         = $uploadFolder.$value['filepath'];
 $verifyfilePathLength = $value['filepath'];
@@ -237,8 +238,9 @@ $verifyfilePathLength = $value['filepath'];
                  $invoiceDetails     .= "<b>Bill Purchase Date : </b>".$bill_purchase_date."<br>";
                  $billAmountWithZero  = $value['billamount'].".00";
                  $invoiceDetails     .= "<b>Bill Amount : </b>".$billAmountWithZero."<br>";
-                 $invoiceDetails     .= "<b>District : </b>".$value['distename']."<br>";
-                // $invoiceDetails     .= "<b>Order Id : </b>".$value['order_by_column']."<br>";
+                 $invoiceDetails     .= "<input type ='hidden' maxlength='4' size='4' name='bsid[]' value= " . $value['bill_selection_id'] . ">";
+                
+                 
                 // $invoiceDetails     .= "<b>User Name : </b>".$value['name']."<br>";
                //  $invoiceDetails     .= "<b>Mobile Number : </b>".$value['mobilenumber']."<br>";
 
@@ -246,6 +248,23 @@ $verifyfilePathLength = $value['filepath'];
                   $Basemodel = new Basemodel;
                   $id = $value['bill_selection_id'];
                   $getRemarks =  $Basemodel ->getRemarksFunction( $id);
+
+
+                  $userDetails      = "";
+                 $userDetails     .= "<b>Name : </b>".$value['name']."<br>";
+                 $userDetails     .= "<b>Mobile No : </b>".$value['mobilenumber']."<br>";
+               
+                 if($value['distename'] == "Coimbatore"){
+                    $invoiceDetails     .= "<div style='color:maroon'><b>District Name : </b>".$value['distename']."<br>";
+                    $invoiceDetails     .= "<b>Order Id : </b>".$value['order_by_column']."</div><br>";
+                 }
+                 else if($value['distename'] == "Madurai"){
+                    $invoiceDetails     .= "<div style='color:rgb(60, 179, 113);'><b>District Name : </b>".$value['distename']."<br>";
+                    $invoiceDetails     .= "<b>Order Id : </b>".$value['order_by_column']."</div><br>";
+
+                 }
+
+                 
 
 
                 //   $status_message = '';
@@ -315,7 +334,7 @@ $verifyfilePathLength = $value['filepath'];
                    
                         <li><i class='far fa-comment-dots' style='color:red;font-size:15px'></i> " .  $rm_message . "</li>
                      </ul>";
-                     $invoiceDetails     .= '<b>Process Status : </b><i class="fa fa-undo" aria-hidden="true" style="color:red"></i> <style="color:red">Return </p><br>';
+                    //  $invoiceDetails     .= '<b>Process Status : </b><i class="fa fa-undo" aria-hidden="true" style="color:red"></i> <style="color:red">Return </p><br>';
 
                         }
 
@@ -363,14 +382,16 @@ $verifyfilePathLength = $value['filepath'];
                  //@stalin
                 $data[] = array(
                     "bill_selection_id" => $bill_selection_id,
+                    "distename"         => $userDetails,
                     "billnumber"        => $invoiceDetails,
                     "action"           => $fianl_roles,
-                    "order_by_column"   => $order_id,
+                   // "order_by_column"   => $order_id,
                     "remarks"            => $remarks_button,
-                    "status"           => $status_message,
-                    "username"              => $value['name'],
-                    "mobilenumber"      => $mobilenumber,
                     "invoicecopy"          =>  $file,
+                    "status"           => $status_message,
+                    // "username"              => $value['name'],
+                    // "mobilenumber"      => $mobilenumber,
+                   
                 );
                 $j++;
 

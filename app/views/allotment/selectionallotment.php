@@ -229,7 +229,7 @@ include('./././public/dash/layout/sidebar.php');
                                                         <div class="col-sm-12">
                                                         <ul>
                                                             <li>April Month Bill For Allotment</li>
-                                                            <li>Only Finalized Details Details Take Allotment</li>
+                                                            <li>Only Finalized Details Details will be taken for  Allotment or included in the Allotment.</li>
                                                         </ul>
                                                         </div>
                                                     </div>
@@ -260,7 +260,7 @@ include('./././public/dash/layout/sidebar.php');
                                             <div style="text-align: center; ">
                                                 <input type="hidden" name="hidden_id" id="hidden_id" />
                                                 <input type="hidden" name="action" id="action" value="insert" />
-                                                <input type="submit" name="button_action" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Submit" id="button_action" class="btn  btn-primary button_save " value="Process Allotment"  <?php echo $m;?> />
+                                                <input type="submit" name="button_action" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Submit" id="button_action" class="btn  btn-primary button_save " value="Submit"  <?php echo $m;?> />
 
                                                 
 
@@ -288,6 +288,7 @@ include('./././public/dash/layout/sidebar.php');
                                 <div class="card">
                                     <div class="card-header card_header_color"> Selection Details </div>
                                     <br>
+                                   
                                     <?php if($roletypecode != '02'){?>
 
                                     <div class="container">
@@ -314,13 +315,17 @@ include('./././public/dash/layout/sidebar.php');
                                             </div>
                                         </div>
                                     </div>
+
+                                    
                                 <?php }?>
                                     <div class="card-body" id="dataTableBody"style="display:none">
 
                                      <form id="frm-example" name ="frm-example" onsubmit="return false;"> 
                                         <!-- @table-->
+
+                                        <div class="" style="text-align:center">Seed Value: <input disabled maxlength='4' size='4' type="text" name="ids" id="seed_value" /></div>
                                         
-                                    <table id="billSelectionTable" class="table table-bordered display responsive nowrap "  style= "width: 100%;">
+                                    <table id="billSelectionTable" class="table table-bordered display responsive nowrap "  style= "width: 100%;font-size:10px">
                                     <div id="datatables">
 
                                     <?php if($roletypecode == '02'){ //ADC Role
@@ -506,63 +511,64 @@ ORDER BY userid ASC ");
                         
                         ?>
                                     </div>
-                                        <thead>
-                                            <tr>
-                                                
-                                                <th></th>
-                                                <!-- <th>District Name</th> -->
-                                                <th style="text-align: center;">Invoice Details</th>
-                                                <!-- <th style="text-align: center;">Invoice Amount( <i class="fa fa-inr" aria-hidden="true"></i>)</th> -->
-                                                <th>Action</th>
-                                                <?php
 
+                                    <?php 
+                                    
+                                    if($roletypecode == '02'){
 
-                                                if($roletypecode == "02"){
+                                        echo '<thead>
+                                        <tr>
+                                        <th></th>
+                                            
+                                           
+                                            <th style="text-align: center;width:40% !important">User <br>Details</th>
+                                           
+                                            <th style="text-align: center;width: 40% !important;">Invoice <br>Details</th>
+                                            
+                                            <th></th>
+                                            <th></th>
+   
 
+                                           
+                                           
 
-                                                echo '
-                                                    <th>order <br>ID </th>
-                                                ';
-                                                }
-                                                else{
+                            
+                                            <th style="text-align: center;width: 20% !important;">Invoice <br> Copy</th>
+                                            
+                                            <th></th>
+                                            
 
+                                            
 
-                                                    echo '
-                                                    <th style="text-align: center;" class="none">order <br>ID </th>
-                                                    ';
+                                        </tr>
+                                    </thead>';
 
+                                    }
+                                    else{
+echo ' <thead>
+<tr>
+    
+    <th></th>
+    <th style="text-align: center;">User <br>Details</th>
+    <!-- <th>District Name</th> -->
+    <th style="text-align: center;width: 10% !important;">Invoice <br>Details</th>
+    <!-- <th style="text-align: center;">Invoice Amount( <i class="fa fa-inr" aria-hidden="true"></i>)</th> -->
+    <th style="text-align: center;width: 20% !important;">Action</th>
+   
 
-                                                }
+<th style="text-align: center;">Remarks</th>
+    <th style="">Invoice <br> Copy</th>
+    <th style="text-align: center;">Status</th>
+    
+    
 
+    
 
-                                                ?>
-
-                                                <th>Remarks</th>
-                                                <th>Status</th>
-                                                <?php 
-
-                                                if($roletypecode == "02"){
-
-                                                    echo '
-                                                     <th>User Name </th>
-                                                     <th>Mobile Number</th>
-                                                     <th>Invoice <br> copy</th>';
-                                                }
-                                                else {
-
-                                                     echo '
-                                                     <th class="none" >User Name </th>
-                                                     <th class="none">Mobile Number</th>
-                                                     <th>Invoice copy</th>';
-
-                                                }
-
-                                                ?>
-  
-                                                
-
-                                            </tr>
-                                        </thead>
+</tr>
+</thead>';
+                                    }
+                                    ?>
+                                       
 
 
                                     </table>
@@ -576,7 +582,7 @@ ORDER BY userid ASC ");
 
                                      </form>
 
-
+                                     
                                         
                                     </div>
                                 </div>

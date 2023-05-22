@@ -1796,7 +1796,7 @@ FROM mybillmyright.bill_selection_details WHERE year_month IN ('$year_month')";
             $columnSortOrder,$row,$rowperpage){
         $row = (int)$row;
         $rowperpage = (int)$rowperpage;
-        $columnName = "order_by_column";
+        $columnName = "md.distename,bs.order_by_column";
 
         if( $rowperpage != -1){
             $query1 = "select  bs.bill_selection_id ,md.distename,bd.mobilenumber,bd.billnumber,bd.billamount,bd.shopname,bd.billdate ,mu.name,bs.order_by_column,bd.filepath
@@ -1818,8 +1818,7 @@ FROM mybillmyright.bill_selection_details WHERE year_month IN ('$year_month')";
         }
 
 
-        //echo $query1;
-       // exit;
+        
 
         
 
