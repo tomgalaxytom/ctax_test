@@ -92,9 +92,14 @@ include('./././public/dash/layout/sidebar.php');
                                             //$alreadyBillSelectedDistricts = [610,586];
                                             $count = count($alreadyBillSelectedDistricts);
                                            // print_r($alreadyBillSelectedDistricts);
-                                            $database->query("select  d.distcode,d.distename from  mybillmyright.mst_district d
-                                            inner join mybillmyright.billdetail c on d.distcode = c.distcode
-                                            group by d.distcode,d.distename order by d.distename asc");
+                                            $database->query("SELECT
+                                            distinct bd.distcode,(select distename from mybillmyright.mst_district where distcode =mc.distcode ) as distename,
+                                            mc.bill_selection_count,TO_CHAR(mc.billentryenddate, 'YYYYMM') as yyyymm
+                                        FROM
+                                            mybillmyright.billdetail bd
+                                        INNER JOIN mybillmyright.mst_config mc 
+                                            ON bd.distcode = mc.distcode
+                                             where TO_CHAR(mc.billentryenddate, 'YYYYMM') = '202304'");
                                             $data = $database->resultSet1();
 
 
@@ -122,8 +127,7 @@ include('./././public/dash/layout/sidebar.php');
                                                         <div class="form-group row">
                                                             <div class="col-sm-4">
                                                                 <select class="form-select " name="distid"  <?php echo $m;?> id="distid" >
-                                                                     <option 
-                                                                    value='all'>---- All ----</option> 
+                                                                    
                                                                     <?php 
                                                                     foreach ($data as $value) 
                                                                     {
@@ -142,12 +146,16 @@ include('./././public/dash/layout/sidebar.php');
                                                         <br>
                                                         <div class="form-group row">
                                                             <div class="col-sm-2">
-                                                                <label class=" col-form-label required">Seed Value</label>
-                                                                <input type="text" class="form-control "  name="seedvalue" id="seedvalue"  />
+                                                                <label class=" col-form-label ">Random No</label>
+                                                                <input  min="1" max="5" required type="text" class="form-control input-sm"  name="seedvalue" id="seedvalue"  />
                                                             </div>
                                                             <div class="col-sm-2">
-                                                                <label class=" col-form-label required">Count Value</label>
-                                                                <input type="text" class="form-control "  name="countvalue" id="countvalue"  />
+                                                                <label class=" col-form-label ">No of Winners</label>
+                                                                <input readonly type="text" class="form-control input-sm "  name="countvalue" id="countvalue"  />
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <label class="  col-form-label ">Maximum Count</label>
+                                                                <input  readonly type="text" class="form-control input-sm"  name="mc" id="mc" value = '3' />
                                                             </div>
                                                             
                                                             
@@ -175,10 +183,12 @@ include('./././public/dash/layout/sidebar.php');
                                                 </div>
                                                 <!-- Table Starts here-->
                                                 <div class="col-md-4">
-                                                        <label class=" col-form-label required">Select Districts</label>
+                                                        <label class=" col-form-label required">Seed Value test</label>
                                                         <div class="form-group row">
                                                             <div class="col-sm-4">
-                                                            <?php $database2 = new database;
+                                                            <?php 
+                                                            
+                                                            $database2 = new database;
 
                                                             $database2->query("select distinct bsd.distcode ,bsd.seed_value,bsd.selection_value,bsd.year_month,
                                                             (select distename from mybillmyright.mst_district where distcode = bsd.distcode) as districtname  
@@ -195,19 +205,25 @@ include('./././public/dash/layout/sidebar.php');
                                                             <table style="width:100%"  class="table table-bordered">
                                                                 <tr>
                                                                     <th>District Name</th>
-                                                                    <th>Dist code</th>
+                                                                  
                                                                     <th>seed value</th>
-                                                                    <th>Count Value</th>
-                                                                    <th>Year Month</th>
+                                                                    <th>Total Winners</th>
+                                                                    <th>Year/Month</th>
                                                                 </tr>
                                                                 <?php
                                                                 foreach($datacount as $value){?>
                                                                     <tr>
                                                                         <td><?php echo $value['districtname']; ?></td>
-                                                                        <td><?php echo $value['distcode']; ?></td>
                                                                         <td><?php echo $value['seed_value']; ?></td>
                                                                         <td><?php echo $value['selection_value']; ?></td>
-                                                                        <td><?php echo $value['year_month']; ?></td>
+                                                                        <td><?php 
+                                                                        
+                                                                        $ym =  $value['year_month'];
+                                                                       
+                                                                    echo $r = substr($ym,0,4)."/".substr($ym,4,6); 
+                                                                        
+                                                                        
+                                                                        ?></td>
                                                                     </tr>
 
                                                                 <?php }
@@ -282,7 +298,7 @@ include('./././public/dash/layout/sidebar.php');
 
                                 
                                 <div class="card">
-                                    <div class="card-header card_header_color"> Selection Details </div>
+                                    <div class="card-header card_header_color"> Seed Testing </div>
                                     <div class="card-body" id="testdataTableBody">
 
                                      <form id="frm-example" name ="frm-example" onsubmit="return false;"> 
@@ -308,7 +324,7 @@ include('./././public/dash/layout/sidebar.php');
                                                                 <tr>
                                                                     <th>Bill ID</th>
                                                                     <th>Dist Name</th>
-                                                                    <th>seed value</th>
+                                                                 
                                                                     <th>Order Number</th>
                                                                 </tr>
                                                                 <?php
@@ -316,7 +332,6 @@ include('./././public/dash/layout/sidebar.php');
                                                                     <tr>
                                                                         <td><?php echo $value['billdetailid']; ?></td>
                                                                         <td><?php echo $value['districtname']; ?></td>
-                                                                        <td><?php echo $value['seed_value']; ?></td>
                                                                         
                                                                         <td><?php echo $value['order_by_column']; ?></td>
                                                                     </tr>
@@ -332,14 +347,14 @@ include('./././public/dash/layout/sidebar.php');
                                                 <div class="col-md-6">
                                                         <label class=" ">Verify Seed Value</label>
                                                         <div class="form-group row">
-                                                            <div class="col-sm-4">
+                                                            <div class="col-sm-12">
                                                            
-                                                            <table style="width:50%"  class="table table-bordered" id="check_value">
+                                                            <table style="width:70%"  class="table table-bordered" id="check_value">
                                                             <tr>
                                                                     <th>Bill ID</th>
                                                                     <th>Dist Name</th>
-                                                                    <th>seed value</th>
-                                                                    <th>Order Number</th>
+                                                                    
+                                                                    <th>Order N0</th>
                                                                 </tr>
                                                                 <tbody>
                                                                 </tbody>
@@ -417,12 +432,71 @@ include('./././public/dash/layout/sidebar.php');
         ?>
         session_roleid='<?php echo $session_roleid?>';
         $(document).ready(function(){
+
+           
+
+            $('#distid').change(function () {
+                var district = $(this).val();
+
+                var siteurl = "http://localhost/projects/ctax_test";    
+// Submit form data via Ajax
+$.ajax({ //Ajax Start 
+                url: siteurl + '/Allotment/getNoofValue',
+                dataType: "json",
+                type: 'POST',
+                data: {
+                    csrf: $('#csrf').val(),
+                    district: district,
+                    
+                },
+                success: function (data) {
+
+                    debugger;
+
+                   
+
+                  
+
+                    if (data.message == "true") {
+                      let mc =   $('#mc').val();
+                        let finalValue = data.results.selection_value / mc;
+                        $('#countvalue').val(finalValue);
+                    }
+                    else {
+                        
+
+                    }
+
+                }
+            });  //Ajax End
+
+            });
+            $('#distid').trigger("change");
+
+
+
+
+
+
+
+
             $("#test_button_action").click(function(){
                 debugger;
                 var district         = $("#distid option:selected").val();
                 var districtText         = $("#distid option:selected").text();
                 var seed_value    =  $("#seedvalue").val();
-                var selectCountValue = $("#countvalue").val();
+
+                if(seed_value == ""){
+
+                    alert("Enter Seed value");
+                    return false;
+
+                }
+                var countValue = $("#countvalue").val();
+                var mc = $("#mc").val();
+
+
+                var selectCountValue = countValue * mc;
                 
                 var bill_year        =  $("#bill_year option:selected").text(); 
                 var bill_month       = $("#bill_month option:selected").val();
@@ -458,23 +532,27 @@ $.ajax({ //Ajax Start
                     if (data.message == "true") {
                         debugger;
 
-                        var trHTML = '';
+                        var trHTML = '<thead><tr><th>Bill ID </th><th>District Name</th><th>Order No</th></tr></thead>';
 
 // var finallyCount = "";
+debugger;
 
  var total = 0;
 
+ let text = data.seed;
+
+
   $.each(data.results, function(index) {
-     var scountvalue = 1;
+   
      var finalcount = data.results[index].bill_selection_count * 1;
    //  var finalTextValue = finalcount+1;
-     trHTML += '<tr><td id="distename">' + data.results[index].billdetailid + '</td><td>' + data.results[index].distcode.toString() + '</td></tr>';
+     trHTML += '<tr><td id="distename">' + data.results[index].billdetailid + '</td><td>' + data.results[index].districtname.toString() + '</td><td>' + data.results[index].row_number + '</td></tr>';
     
-
+     $('#check_value').html(trHTML);
      
      
 });
-$('#check_value tbody').html(trHTML);
+
                        
 
 

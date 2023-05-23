@@ -228,8 +228,9 @@ include('./././public/dash/layout/sidebar.php');
                                                     <div class="form-group row">
                                                         <div class="col-sm-12">
                                                         <ul>
-                                                            <li>April Month Bill For Allotment</li>
-                                                            <li>Only Finalized Details Details will be taken for  Allotment or included in the Allotment.</li>
+                                                            <li>1. Selection process will be done by the system automatically</li>
+                                                            <li>2. Each District ,maximum of (N) bills will be allotted randomly with order-id for &nbsp;&nbsp;&nbsp;verification and the top(N) approved bills will be considered for award.</li>
+                                                        <li>3. Allotment process will not be revoked after processing.</li>
                                                         </ul>
                                                         </div>
                                                     </div>
@@ -325,7 +326,7 @@ include('./././public/dash/layout/sidebar.php');
 
                                         <div class="" style="text-align:center">Seed Value: <input disabled maxlength='4' size='4' type="text" name="ids" id="seed_value" /></div>
                                         
-                                    <table id="billSelectionTable" class="table table-bordered display responsive nowrap "  style= "width: 100%;font-size:10px">
+                                    <table id="billSelectionTable" class="table table-bordered display responsive nowrap "  style= "width: 100%;font-size:12px">
                                     <div id="datatables">
 
                                     <?php if($roletypecode == '02'){ //ADC Role

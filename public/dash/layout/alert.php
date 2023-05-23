@@ -147,7 +147,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#06163a;">
 
-                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Lot Selection Process</h3>
+                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Confirmation Alert</h3>
 
                 <button type="button" id="button_close" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -184,7 +184,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#06163a;">
 
-                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Lot Selection Process</h3>
+                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Confirmation Alert</h3>
 
                 <button type="button" id="button_close" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -358,7 +358,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#06163a;">
 
-                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Lot Selection Process</h3>
+                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Confirmation Alert</h3>
 
                 <button type="button" id="button_close" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -391,7 +391,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#06163a;">
 
-                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Lot Selection Process</h3>
+                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Confirmation Alert</h3>
 
                 <button type="button" id="button_close" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -429,7 +429,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#06163a;">
 
-                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Lot Selection Process</h3>
+                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Confirmation Alert</h3>
 
                 <button type="button" id="button_close" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -462,7 +462,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#06163a;">
 
-                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Lot Selection Process</h3>
+                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Confirmation Alert</h3>
 
                 <button type="button" id="button_close" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -494,7 +494,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#06163a;">
 
-                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Lot Selection Process</h3>
+                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Confirmation Alert</h3>
 
                 <button type="button" id="button_close" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -527,7 +527,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#06163a;">
 
-                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Lot Selection Process</h3>
+                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Confirmation Alert</h3>
 
                 <button type="button" id="button_close" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -627,7 +627,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#06163a;">
 
-                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Lot Selection Process</h3>
+                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Confirmation Alert</h3>
 
                 <button type="button" id="button_close" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -672,7 +672,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#06163a;">
 
-                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Lot Selection Process</h3>
+                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Confirmation Alert</h3>
 
                 <button type="button" id="button_close" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -705,7 +705,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#06163a;">
 
-                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Lot Selection Process</h3>
+                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Confirmation Alert</h3>
 
                 <button type="button" id="button_close" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -801,7 +801,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#06163a;">
 
-                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Lot Selection Process</h3>
+                <h3 id="alert_header" class="text-white" style="margin-left: 150px;">Confirmation Alert</h3>
 
                 <button type="button" id="button_close" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>

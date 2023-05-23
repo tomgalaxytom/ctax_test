@@ -256,7 +256,7 @@ $verifyfilePathLength = $value['filepath'];
                
                  if($value['distename'] == "Coimbatore"){
                     $invoiceDetails     .= "<div style='color:maroon'><b>District Name : </b>".$value['distename']."<br>";
-                    $invoiceDetails     .= "<b>Order Id : </b>".$value['order_by_column']."</div><br>";
+                    $invoiceDetails     .= "<b>Order Id : </b>".$value['order_by_column']."</div>";
                  }
                  else if($value['distename'] == "Madurai"){
                     $invoiceDetails     .= "<div style='color:rgb(60, 179, 113);'><b>District Name : </b>".$value['distename']."<br>";
@@ -298,7 +298,7 @@ $verifyfilePathLength = $value['filepath'];
                    $forwarded_to_name = $remark['forwarded_to_name'];
                    $rm_message = $remark['remarks'];
                    $forwarded_on = $remark['forwarded_on'];
-                   $new_date = date('jS F Y', strtotime($forwarded_on));
+                   $new_date = date('jS F Y h:i:s', strtotime($forwarded_on));
                    $access_code =  $remark['process_code'];
                    if( $access_code=="F"){
                        $access_code_msg = "Forwarded To  ";
@@ -321,7 +321,9 @@ $verifyfilePathLength = $value['filepath'];
                        
                    }
                    else{
-                        $access_code_msg = "Revert Back  ";
+                    // $invoiceDetails    .= '<b>Process Status : </b>
+                    // <button type="button" style="font-size:11px;height:30px" class="btn btn-danger">Return</button> </p><br>';
+                        $access_code_msg = "Revert Back";
 
                         if($rm_message == ""){
 
@@ -332,10 +334,9 @@ $verifyfilePathLength = $value['filepath'];
 
                             $r = "<ul style='list-style:none;padding-left:4px'>
                    
-                        <li><i class='far fa-comment-dots' style='color:red;font-size:15px'></i> " .  $rm_message . "</li>
+                        <li><i class='far fa-comment-dots ' style='color:red;font-size:15px '></i> " .  $rm_message . "</li>
                      </ul>";
-                    //  $invoiceDetails     .= '<b>Process Status : </b><i class="fa fa-undo" aria-hidden="true" style="color:red"></i> <style="color:red">Return </p><br>';
-
+                     
                         }
 
 
@@ -347,6 +348,9 @@ $verifyfilePathLength = $value['filepath'];
                    }
                    $final_remarks = "<b>".$forwarded_by_name." </b>".$access_code_msg.  "<b>".$forwarded_to_name." </b> on " .$new_date;
 
+                 
+
+                  
 
 
 
@@ -358,6 +362,11 @@ $verifyfilePathLength = $value['filepath'];
                     </li>";
                  }
                  $status_message .="</ul>";
+
+                //  $access_code_msg = "Revert Back";
+                //  if( $access_code_msg  == "Revert Back"){
+                //   $invoiceDetails    .= '<b>Process Status : </b><i class="fa fa-undo" aria-hidden="true" style="color:red"></i> <style="color:red">Return </p><br>';
+                //  }
                  $mobilenumber = '';
                  $mobilenumber .= $value['mobilenumber']."<input type ='hidden' name='bsid[]' value= " . $value['bill_selection_id'] . ">";
 
@@ -719,7 +728,7 @@ $verifyfilePathLength = $value['filepath'];
                   $order_id          = "<h6 style='text-align:center;'>".$value['order_by_column']."</h6>";
                   $Basemodel = new Basemodel;
                   $id = $value['bill_selection_id'];
-                  $getRemarks =  $Basemodel ->getRemarksFunction( $id);
+                  $getRemarks =  $Basemodel ->getRemarksFunctionByVerified( $id);
                   $status_message = '';
                   $status_message .= "<ul>";
                   foreach($getRemarks as $remark){
@@ -729,18 +738,18 @@ $verifyfilePathLength = $value['filepath'];
                     $forwarded_to_name = $remark['forwarded_to_name'];
                     $rm_message = $remark['remarks'];
                     $forwarded_on = $remark['forwarded_on'];
-                    $new_date = date('jS F Y', strtotime($forwarded_on));
+                    $new_date = date('jS F Y h:i:s', strtotime($forwarded_on));
                     $access_code =  $remark['process_code'];
                     if( $access_code=="F"){
                         $access_code_msg = "Forwarded To  ";
-                        $r = "<ul style='list-style:none;padding-left:4px'>
+                        $r = "<ul style='list-style:none;padding-left:4px' >
                     
                         <li><i class='far fa-comment-dots' style='color:green;font-size:15px'></i> " .  $rm_message . "</li>
                      </ul>";
                     }
                     else if($access_code=="V"){
 
-                        $access_code_msg = "Verified   ";
+                        $access_code_msg = "Verified";
                         $r = "<ul style='list-style:none;padding-left:4px'>
                     
                         <li><i class='far fa-comment-dots' style='color:blue;font-size:15px'></i> " .  $rm_message . "</li>
@@ -1186,7 +1195,7 @@ $verifyfilePathLength = $value['filepath'];
                
                  $response = array(
                     "message" => "true",
-                   // "count" => $count,
+                    "seed " => $seedValue ,
                     "results" => $check_seed
                     );
                     echo json_encode($response);
@@ -1211,6 +1220,44 @@ $verifyfilePathLength = $value['filepath'];
                         //         );
                         //         echo json_encode($response);
                         //        exit;
+        }
+    
+    }
+    catch (Exception $e) 
+    {
+        header('HTTP/1.1 '.$e->getCode().' Internal Server Booboo');
+        header('Content-Type: application/json');
+        echo json_encode(array('message' => $e->getMessage(), 'code' => $e->getCode()));
+    }
+}
+
+
+
+
+public function getNoofValue(){
+    try 
+    {
+        if(!(($_SERVER['REQUEST_METHOD']== 'POST') || ($_SERVER['REQUEST_METHOD'] == 'post')))
+            throw new Exception('Forbidden','403');
+
+        else
+        {
+                $_POST  = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
+
+               
+
+                 $district            = $_POST['district'];
+                 $model = new Basemodel;
+                 $no_of_winners = $model->getNoofValueModel( $district);
+               
+                 $response = array(
+                    "message" => "true",
+                    "results" => $no_of_winners
+                    );
+                    echo json_encode($response);
+                   exit;
+
+               
         }
     
     }

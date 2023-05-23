@@ -156,8 +156,8 @@ window.onload = function () {
                                     var total = 0;
 
                                      $.each(data.results, function(index) {
-                                        var scountvalue = 1;
-                                        var finalcount = data.results[index].bill_selection_count * 1;
+                                        var scountvalue = 3;
+                                        var finalcount = data.results[index].bill_selection_count * 3;
                                       //  var finalTextValue = finalcount+1;
                                         trHTML += '<tr><td id="distename">' + data.results[index].districtname + '</td><td>' + data.results[index].bill_selection_count.toString() + '</td><td>' + scountvalue + '</td><td>' + finalcount + '</td></tr>';
                                         $('#records_table').html(trHTML);
@@ -420,7 +420,7 @@ function emptyTableChecking(formData, district) {
 
                     
 
-                    $('#seed_value').val(localStorage.getItem("seed_value"));
+                   // $('#seed_value').val(localStorage.getItem("seed_value"));
                 
 
                    
@@ -702,6 +702,8 @@ function allotment_fetch_data() {
     // var table = $('#billSelectionTable').DataTable();
     // table.destroy();
     //;
+
+    
     
     var selectCountValue = ($("#menu").val()=="")?"":$("#menu").val();
     var bill_year = $("#bill_year option:selected").text();

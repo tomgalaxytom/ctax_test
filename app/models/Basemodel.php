@@ -1103,7 +1103,7 @@ $yearmonth =date("Y").date('m');
             $fetchDistrictRecords = $this->db->resultSet1();
             foreach ($fetchDistrictRecords as $value) {
                 $distcode = $value['distcode'] ;
-                $countValue = $value['bill_selection_count'] ;
+                $countValue = $value['bill_selection_count'] *3 ;
                 $sqlQuery = "select mybillmyright.getallotmentwinnerwithseed('$distcode','$countValue',$seedValue,'$yearmonth')";
                 $this->db->query($sqlQuery) ;
                 if ($this->db->execute()) {
@@ -1737,6 +1737,26 @@ FROM mybillmyright.bill_selection_details WHERE year_month IN ('$year_month')";
                 from mybillmyright.transaction_detail td 
                 inner join mybillmyright.history_transactions ht on  td.bill_selection_id = ht.bill_selection_id 
                  where   td.bill_selection_id= $id order by ht.forwarded_on desc";
+
+        $this->db->query($sql);
+        $results = $this->db->resultSet1();
+        return $results;
+
+    }
+
+
+    public function getRemarksFunctionByVerified($id){
+        // $sql = "select ht.remarks
+        //         from mybillmyright.transaction_detail td 
+        //         inner join mybillmyright.history_transactions ht on  td.bill_selection_id = ht.bill_selection_id 
+        //         where   td.bill_selection_id= $id order by ht.forwarded_on desc";
+                $sql = " select ht.forwarded_on,ht.process_code,ht.forwarded_by,ht.forwarded_to, ht.remarks,
+                (select name from mybillmyright.mst_dept_user where userid = ht.forwarded_by) as forwarded_by_name,
+                (select name from mybillmyright.mst_dept_user where userid = ht.forwarded_to) as forwarded_to_name
+                from mybillmyright.transaction_detail td 
+                inner join mybillmyright.history_transactions ht on  td.bill_selection_id = ht.bill_selection_id 
+                 where   td.bill_selection_id= $id and ht.process_code = 'V' order by ht.forwarded_on desc";
+              
 
         $this->db->query($sql);
         $results = $this->db->resultSet1();
@@ -2476,13 +2496,12 @@ WHERE distcode = '$district'";
                 $this->db->query($sql) ;
                 $this->db->execute();
             $sqlQuery = 
-            "SELECT billdetailid,userid, distcode,configcode, mobilenumber, acknumber,row_number() over (order by random()) FROM 
-            mybillmyright.billdetail where distcode='$district' and
+            "SELECT  bsd.billdetailid, bsd.userid, (select distename from mybillmyright.mst_district where distcode = bsd.distcode) as districtname,row_number() over (order by random()) FROM 
+            mybillmyright.billdetail as bsd where distcode='$district' and
             substring(acknumber,3,4)=
             '$yearmonth'  
             limit $selectCountValue";
-            //echo $sqlQuery;
-            //exit;
+           
             $this->db->query($sqlQuery) ;
            $row = $this->db->resultSet1();
           // print_r($row);
@@ -2497,7 +2516,18 @@ WHERE distcode = '$district'";
 
         }
 
+        public function getNoofValueModel($district){
+            $sqlQuery = 
+            "select distinct bsd.distcode ,bsd.seed_value,bsd.selection_value,bsd.year_month,
+            (select distename from mybillmyright.mst_district where distcode = bsd.distcode) as districtname  
+            from mybillmyright.bill_selection_details  bsd where distcode ='$district'
+            group by  bsd.distcode,bsd.seed_value,bsd.selection_value,bsd.year_month";
+            $this->db->query($sqlQuery) ;
+           $row = $this->db->single();
+                return $row;
 
+            }
+      
        
 
          /**
@@ -2518,60 +2548,3 @@ WHERE distcode = '$district'";
 
 
 
-
-SELECT billdetailid,userid, distcode,configcode, mobilenumber, acknumber,row_number() over (order by random()) FROM 
-            mybillmyright.billdetail where distcode='569' and
-            substring(acknumber,3,4)=
-            '2304'  
-            limit 3
-
-
-select setseed('-0.7');
-SELECT billdetailid,userid, configcode, mobilenumber, acknumber,row_number() over (order by random()) FROM 
-mybillmyright.billdetail where distcode='578' and
-substring(acknumber,3,4)=
-'2304'  
-limit 2
-
-select setseed('-0.7');
-SELECT billdetailid,userid, configcode, mobilenumber, acknumber,row_number() over (order by random()) FROM 
-mybillmyright.billdetail where 
-substring(acknumber,3,4)=
-'2304'  
-limit 5
-
-select * from mybillmyright.bill_selection_details where distcode = '569'
-
-
-
-
-
-select  bsd.distcode ,bsd.seed_value,bsd.selection_value,bsd.year_month,
-         (select distename from mybillmyright.mst_district where distcode = bsd.distcode) as districtname  
-             from mybillmyright.bill_selection_details  bsd 
-                                                            group by  bsd.distcode,bsd.seed_value,bsd.selection_value,bsd.year_month
-
-
-
-select * from mybillmyright.mst_district 
-
-
-select setseed('-0.7');
-            SELECT billdetailid,userid, configcode, mobilenumber, acknumber,row_number() over (order by random()) FROM 
-            mybillmyright.billdetail where distcode='569' and
-            substring(acknumber,3,4)=
-            '2304'  
-            limit 3
-
-
-
-select distinct bsd.distcode ,bsd.seed_value,bsd.selection_value,bsd.year_month,
-            (select distename from mybillmyright.mst_district where distcode = bsd.distcode) as districtname  
-            from mybillmyright.bill_selection_details  bsd
-            group by  bsd.distcode,bsd.seed_value,bsd.selection_value,bsd.year_month
-select setseed('-0.7');
-            SELECT billdetailid,userid, configcode, mobilenumber, acknumber,row_number() over (order by random()) FROM 
-            mybillmyright.billdetail where distcode='569' and
-            substring(acknumber,3,4)=
-            '2304'  
-            limit 3
