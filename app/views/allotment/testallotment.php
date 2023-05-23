@@ -122,8 +122,8 @@ include('./././public/dash/layout/sidebar.php');
                                                         <div class="form-group row">
                                                             <div class="col-sm-4">
                                                                 <select class="form-select " name="distid"  <?php echo $m;?> id="distid" >
-                                                                    <!-- <option 
-                                                                    value='all'>---- All ----</option> -->
+                                                                     <option 
+                                                                    value='all'>---- All ----</option> 
                                                                     <?php 
                                                                     foreach ($data as $value) 
                                                                     {
@@ -248,7 +248,7 @@ include('./././public/dash/layout/sidebar.php');
                                             <div style="text-align: center; ">
                                                 <input type="hidden" name="hidden_id" id="hidden_id" />
                                                 <input type="hidden" name="action" id="action" value="insert" />
-                                                <input type="submit" name="button_action" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Submit" id="test_button_action" class="btn  btn-primary button_save " value="Process Allotment"  />
+                                                <input type="submit" name="button_action" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Submit" id="test_button_action" class="btn  btn-primary button_save " value="submit"  />
 
                                                 
 
@@ -287,71 +287,78 @@ include('./././public/dash/layout/sidebar.php');
 
                                      <form id="frm-example" name ="frm-example" onsubmit="return false;"> 
                                         <!-- @table-->
-                                        
-                                    <table id="testSelectionTable" class="table table-bordered display responsive nowrap "  style= "width: 100%;display:none">
-                                    <div id="datatables">
-                       
-                                    </div>
-                                    <thead>
-                                            <tr>
+                                        <label class="">From DB</label>
+                                        <div class="row">
+                                                <div class="col-md-6">
+
+                                            <?php
+                                            $database2 = new database;
+
+                                            $database2->query("select  bsd.billdetailid,bsd.distcode ,bsd.seed_value,bsd.selection_value,bsd.year_month,bsd.order_by_column,
+                                            (select distename from mybillmyright.mst_district where distcode = bsd.distcode) as districtname  
+                                                from mybillmyright.bill_selection_details  bsd order by districtname,bsd.order_by_column asc");
+                                            $fromdb = $database2->resultSet1();
+                                            
+                                            ?>
+
+
+
+
+                                                <table style="width:50%"  class="table table-bordered">
+                                                                <tr>
+                                                                    <th>Bill ID</th>
+                                                                    <th>Dist Name</th>
+                                                                    <th>seed value</th>
+                                                                    <th>Order Number</th>
+                                                                </tr>
+                                                                <?php
+                                                                foreach($fromdb as $value){?>
+                                                                    <tr>
+                                                                        <td><?php echo $value['billdetailid']; ?></td>
+                                                                        <td><?php echo $value['districtname']; ?></td>
+                                                                        <td><?php echo $value['seed_value']; ?></td>
+                                                                        
+                                                                        <td><?php echo $value['order_by_column']; ?></td>
+                                                                    </tr>
+
+                                                                <?php }
+                                                                
+                                                                
+                                                                ?>
+                                                                
+                                                            </table>
+                                                </div>
+                                                <!-- Table Starts here-->
+                                                <div class="col-md-6">
+                                                        <label class=" ">Verify Seed Value</label>
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-4">
+                                                           
+                                                            <table style="width:50%"  class="table table-bordered" id="check_value">
+                                                            <tr>
+                                                                    <th>Bill ID</th>
+                                                                    <th>Dist Name</th>
+                                                                    <th>seed value</th>
+                                                                    <th>Order Number</th>
+                                                                </tr>
+                                                                <tbody>
+                                                                </tbody>
+                                                                
+                                                                
+                                                            </table>
+                                                            </div>
+                                                           
+                                                        </div>
+                                                </div>
+                                                <!-- Table Starts here-->
+
+
+
+
+
                                                 
-                                                <th></th>
-                                                <!-- <th>District Name</th> -->
-                                                <th style="text-align: center;">Invoice Details</th>
-                                                <!-- <th style="text-align: center;">Invoice Amount( <i class="fa fa-inr" aria-hidden="true"></i>)</th> -->
-                                                <th>Action</th>
-                                                <?php
-
-
-                                                if($roletypecode == "02"){
-
-
-                                                echo '
-                                                    <th>order <br>ID </th>
-                                                ';
-                                                }
-                                                else{
-
-
-                                                    echo '
-                                                    <th style="text-align: center;" class="none">order <br>ID </th>
-                                                    ';
-
-
-                                                }
-
-
-                                                ?>
-
-                                                <th>Remarks</th>
-                                                <th>Status</th>
-                                                <?php 
-
-                                                if($roletypecode == "02"){
-
-                                                    echo '
-                                                     <th>User Name </th>
-                                                     <th>Mobile Number</th>
-                                                     <th>Invoice <br> copy</th>';
-                                                }
-                                                else{
-
-                                                     echo '
-                                                     <th class="none" >User Name </th>
-                                                     <th class="none">Mobile Number</th>
-                                                     <th class="none">Invoice copy</th>';
-
-                                                }
-
-                                                ?>
-  
-                                                
-
-                                            </tr>
-                                        </thead>
-
-
-                                    </table>
+                                            </div>
+                                                            
                                     
                                    <!-- 
  <input type="hidden1" id="hidden_data"> -->
@@ -423,7 +430,72 @@ include('./././public/dash/layout/sidebar.php');
                 var yearmonth        = bill_year.concat(bill_month);
                 
                 let seedValue        = seed_value;
-                fetch_data_auto_load(selectCountValue, yearmonth, seedValue, district, actionfunc = 'test_allotment', 'all');
+                var formData = {
+        select_count_value: selectCountValue,
+        yearmonth: yearmonth,
+        seedValue: seedValue,
+        district: district,
+    };
+    var siteurl = "http://localhost/projects/ctax_test";    
+// Submit form data via Ajax
+$.ajax({ //Ajax Start 
+                url: siteurl + '/Allotment/checkSeedValue',
+                dataType: "json",
+                type: 'POST',
+                data: {
+                    csrf: $('#csrf').val(),
+                    district: district,
+                    selectCountValue: selectCountValue,
+                    seedValue: seedValue,
+                    yearmonth: yearmonth,
+                },
+                success: function (data) {
+
+                   
+
+                  
+
+                    if (data.message == "true") {
+                        debugger;
+
+                        var trHTML = '';
+
+// var finallyCount = "";
+
+ var total = 0;
+
+  $.each(data.results, function(index) {
+     var scountvalue = 1;
+     var finalcount = data.results[index].bill_selection_count * 1;
+   //  var finalTextValue = finalcount+1;
+     trHTML += '<tr><td id="distename">' + data.results[index].billdetailid + '</td><td>' + data.results[index].distcode.toString() + '</td></tr>';
+    
+
+     
+     
+});
+$('#check_value tbody').html(trHTML);
+                       
+
+
+                    }
+                    else {
+                        
+
+                    }
+
+                }
+            });  //Ajax End
+
+
+
+
+
+
+
+
+
+
             });
 
 
@@ -444,9 +516,17 @@ include('./././public/dash/layout/sidebar.php');
         displayDatatable(formData);
        // location.reload();
     }
-    else {
-        //emptyTableChecking(formData, district);
+    else if (district == 'all' && actionfunc == 'test_allotment') {
 
+        var formData = {
+        select_count_value: selectCountValue,
+        yearmonth: yearmonth,
+        seedValue: seedValue,
+        district: district,
+        act: actionfunc,
+        bill_status: bill_status,
+    };
+         
     }
 }
 

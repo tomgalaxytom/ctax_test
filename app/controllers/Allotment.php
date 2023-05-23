@@ -1160,7 +1160,67 @@ $verifyfilePathLength = $value['filepath'];
         }
     }
 
+ // Empty Table Checking
+ public function checkSeedValue(){
+    try 
+    {
+        if(!(($_SERVER['REQUEST_METHOD']== 'POST') || ($_SERVER['REQUEST_METHOD'] == 'post')))
+            throw new Exception('Forbidden','403');
 
+        else
+        {
+                $_POST  = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
+
+               
+
+                 $district            = $_POST['district'];
+
+                
+                 $seedValue = $_POST["seedValue"];
+                 $yearmonth = $_POST["yearmonth"];
+                 $selectCountValue = $_POST["selectCountValue"];
+                
+
+                 $model = new Basemodel;
+                 $check_seed = $model->checkSeedValueToModel($seedValue, $district,$yearmonth,$selectCountValue);
+               
+                 $response = array(
+                    "message" => "true",
+                   // "count" => $count,
+                    "results" => $check_seed
+                    );
+                    echo json_encode($response);
+                   exit;
+
+               
+                        // if($check_seed > 0){
+                             
+                        //         $message = "true";
+                        //         $count = $forward_to_bill_selection;
+                        //         $district = $district;
+                                
+                        //     }
+                        //     else{
+                        //         $message = "false";
+                        //         $count = $forward_to_bill_selection ;
+                        //     }
+                        //     $response = array(
+                        //         "message" => $message,
+                        //         "count" => $count,
+                        //         "district" => $district
+                        //         );
+                        //         echo json_encode($response);
+                        //        exit;
+        }
+    
+    }
+    catch (Exception $e) 
+    {
+        header('HTTP/1.1 '.$e->getCode().' Internal Server Booboo');
+        header('Content-Type: application/json');
+        echo json_encode(array('message' => $e->getMessage(), 'code' => $e->getCode()));
+    }
+}
 
 
 }

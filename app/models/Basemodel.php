@@ -2456,6 +2456,49 @@ WHERE distcode = '$district'";
            
 
         } 
+        public function checkSeedValueToModel($seedValue, $district,$yearmonth,$selectCountValue){
+
+            $yearmonth = substr($yearmonth,2);
+
+            if($district != 'all'){
+
+                // $sql = "select distinct bsd.distcode ,bsd.seed_value,bsd.selection_value,bsd.year_month,
+                // (select distename from mybillmyright.mst_district where distcode = bsd.distcode) as districtname  
+                // from mybillmyright.bill_selection_details  bsd
+                // group by  bsd.distcode,bsd.seed_value,bsd.selection_value,bsd.year_month";
+                // $this->db->query($sql);
+                // $fetchRecords = $this->db->resultSet1();
+                // foreach ($fetchRecords as $value) {
+    
+                // $distcode = $value['distcode'] ;
+                // $selection_value = $value['selection_value'] ;
+                $sql = "select setseed('$seedValue')";
+                $this->db->query($sql) ;
+                $this->db->execute();
+            $sqlQuery = 
+            "SELECT billdetailid,userid, distcode,configcode, mobilenumber, acknumber,row_number() over (order by random()) FROM 
+            mybillmyright.billdetail where distcode='$district' and
+            substring(acknumber,3,4)=
+            '$yearmonth'  
+            limit $selectCountValue";
+            //echo $sqlQuery;
+            //exit;
+            $this->db->query($sqlQuery) ;
+           $row = $this->db->resultSet1();
+          // print_r($row);
+    
+              //  }
+                return $row;
+
+            }
+           
+
+           
+
+        }
+
+
+       
 
          /**
          *  Author: Stalin Thomas
@@ -2466,6 +2509,7 @@ WHERE distcode = '$district'";
          * 
          * 
          */   
+        
  
 }
 
@@ -2473,3 +2517,61 @@ WHERE distcode = '$district'";
 
 
 
+
+
+SELECT billdetailid,userid, distcode,configcode, mobilenumber, acknumber,row_number() over (order by random()) FROM 
+            mybillmyright.billdetail where distcode='569' and
+            substring(acknumber,3,4)=
+            '2304'  
+            limit 3
+
+
+select setseed('-0.7');
+SELECT billdetailid,userid, configcode, mobilenumber, acknumber,row_number() over (order by random()) FROM 
+mybillmyright.billdetail where distcode='578' and
+substring(acknumber,3,4)=
+'2304'  
+limit 2
+
+select setseed('-0.7');
+SELECT billdetailid,userid, configcode, mobilenumber, acknumber,row_number() over (order by random()) FROM 
+mybillmyright.billdetail where 
+substring(acknumber,3,4)=
+'2304'  
+limit 5
+
+select * from mybillmyright.bill_selection_details where distcode = '569'
+
+
+
+
+
+select  bsd.distcode ,bsd.seed_value,bsd.selection_value,bsd.year_month,
+         (select distename from mybillmyright.mst_district where distcode = bsd.distcode) as districtname  
+             from mybillmyright.bill_selection_details  bsd 
+                                                            group by  bsd.distcode,bsd.seed_value,bsd.selection_value,bsd.year_month
+
+
+
+select * from mybillmyright.mst_district 
+
+
+select setseed('-0.7');
+            SELECT billdetailid,userid, configcode, mobilenumber, acknumber,row_number() over (order by random()) FROM 
+            mybillmyright.billdetail where distcode='569' and
+            substring(acknumber,3,4)=
+            '2304'  
+            limit 3
+
+
+
+select distinct bsd.distcode ,bsd.seed_value,bsd.selection_value,bsd.year_month,
+            (select distename from mybillmyright.mst_district where distcode = bsd.distcode) as districtname  
+            from mybillmyright.bill_selection_details  bsd
+            group by  bsd.distcode,bsd.seed_value,bsd.selection_value,bsd.year_month
+select setseed('-0.7');
+            SELECT billdetailid,userid, configcode, mobilenumber, acknumber,row_number() over (order by random()) FROM 
+            mybillmyright.billdetail where distcode='569' and
+            substring(acknumber,3,4)=
+            '2304'  
+            limit 3
